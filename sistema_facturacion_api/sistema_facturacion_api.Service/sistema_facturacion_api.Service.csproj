@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\sistema_facturacion_api.Contexts\sistema_facturacion_api.Contexts.csproj" />
+    <ProjectReference Include="..\sistema_facturacion_api.Data\sistema_facturacion_api.Data.csproj" />
+    <ProjectReference Include="..\sistema_facturacion_api.Useful\sistema_facturacion_api.Useful.csproj" />
+  </ItemGroup>
+
+</Project>
