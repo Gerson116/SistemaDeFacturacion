@@ -19,11 +19,11 @@ namespace sistema_facturacion_api.Controllers
         {
             _usuarioCRUD = usuarioCRUD;
         }
-        [HttpGet("ListadoDeUsuarios")]
-        public async Task<ActionResult<OperationResultRequest>> ListadoDeUsuarios()
+        [HttpGet("ListadoDeUsuarios/{page}/{cantidadDeElemento}")]
+        public async Task<ActionResult<OperationResultRequest>> ListadoDeUsuarios(int page, int cantidadDeElemento)
         {
             _operationResultRequest = new OperationResultRequest();
-            _operationResultRequest = await _usuarioCRUD.ListadoDeUsuarios();
+            _operationResultRequest = await _usuarioCRUD.ListadoDeUsuarios(page, cantidadDeElemento);
             return _operationResultRequest;
         }
         [HttpGet("PerfilUsuario/{usuarioId}")]
@@ -37,6 +37,12 @@ namespace sistema_facturacion_api.Controllers
         public async Task<ActionResult<OperationResultRequest>> AgregarUsuario([FromBody] TblUsuariosDTO usuario)
         {
             _operationResultRequest = new OperationResultRequest();
+            if (usuario.TarjetaDeIdentificacion == null && usuario.Pasaporte == null)
+            {
+                _operationResultRequest.Succcess = false;
+                _operationResultRequest.Message = "Los campos cedula y/o pasaporte son requeridos.";
+                return BadRequest(_operationResultRequest);
+            }
             _operationResultRequest = await _usuarioCRUD.AgregarUsuario(usuario);
             return _operationResultRequest;
         }
@@ -44,17 +50,23 @@ namespace sistema_facturacion_api.Controllers
         public async Task<ActionResult<OperationResultRequest>> EditarUsuario([FromBody] TblUsuariosDTO usuario)
         {
             _operationResultRequest = new OperationResultRequest();
+            if (usuario.TarjetaDeIdentificacion == null && usuario.Pasaporte == null)
+            {
+                _operationResultRequest.Succcess = false;
+                _operationResultRequest.Message = "Los campos cedula y/o pasaporte son requeridos.";
+                return BadRequest(_operationResultRequest);
+            }
             _operationResultRequest = await _usuarioCRUD.EditarUsuario(usuario);
             return _operationResultRequest;
         }
-        [HttpPatch("EliminarUsuario/{usuarioId}")]
-        public async Task<ActionResult<OperationResultRequest>> EliminarUsuario(int usuarioId, 
+        [HttpPatch("CambiarEstadoUsuario/{usuarioId}")]
+        public async Task<ActionResult<OperationResultRequest>> CambiarEstadoUsuario(int usuarioId, 
             [FromBody] JsonPatchDocument<TblUsuarios> usuariosPatch)
         {
             _operationResultRequest = new OperationResultRequest();
             if (usuariosPatch != null)
             {
-                _operationResultRequest = await _usuarioCRUD.EliminarUsuario(usuarioId, usuariosPatch);
+                _operationResultRequest = await _usuarioCRUD.CambiarEstadoUsuario(usuarioId, usuariosPatch);
                 return Ok(_operationResultRequest);
             }
             _operationResultRequest.Succcess = false;

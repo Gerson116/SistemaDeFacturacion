@@ -14,10 +14,10 @@ namespace sistema_facturacion_api.Service.UsuarioService
 {
     public interface IUsuarioCRUD
     {
-        Task<OperationResultRequest> ListadoDeUsuarios();
+        Task<OperationResultRequest> ListadoDeUsuarios(int page, int cantidadDeElemento);
         Task<OperationResultRequest> PerfilUsuario(int usuarioId);
         Task<OperationResultRequest> AgregarUsuario(TblUsuariosDTO usuario);
         Task<OperationResultRequest> EditarUsuario(TblUsuariosDTO usuario);
-        Task<OperationResultRequest> EliminarUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch);
+        Task<OperationResultRequest> CambiarEstadoUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch);
     }
 }

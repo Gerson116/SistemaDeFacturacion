@@ -37,12 +37,29 @@ namespace sistema_facturacion_api.Service.UsuarioService
                 _usuarios = _mapper.Map<TblUsuarios>(usuario);
                 _usuarios.FechaDeCreacion = DateTime.Now;
                 _usuarios.Password = _encriptarPass.EncriptingPassword(usuario.Password);
-                await _dbContext.Usuario.AddAsync(_usuarios);
-                await _dbContext.SaveChangesAsync();
 
-                _operationResult.Succcess = true;
-                _operationResult.Message = _mesajeExitoso;
-                _operationResult.Data = usuario;
+                bool resp = await ValidarDocumento(documentoDeIdentidad: _usuarios.TarjetaDeIdentificacion,
+                    pasaporte: _usuarios.Pasaporte);
+                if (!resp)
+                {
+                    //await _dbContext.Usuario.AddAsync(_usuarios);
+                    //await _dbContext.SaveChangesAsync();
+                    _operationResult.Succcess = true;
+                    _operationResult.Message = _mesajeExitoso;
+                    _operationResult.Data = usuario;
+                }
+                else if (_usuarios.TarjetaDeIdentificacion == null && _usuarios.Pasaporte == null)
+                {
+                    _operationResult.Succcess = false;
+                    _operationResult.Message = "Ocurrio un error";
+                    _operationResult.Data = $"Los campos TarjetaDeIdentificacion o Pasaporte debe tener datos.";
+                }
+                else
+                {
+                    _operationResult.Succcess = false;
+                    _operationResult.Message = "Ocurrio un error";
+                    _operationResult.Data = $"La cedula: {_usuarios.TarjetaDeIdentificacion} o pasaporte: {_usuarios.Pasaporte} ya existe";
+                }
             }
             catch (Exception ex)
             {
@@ -70,7 +87,7 @@ namespace sistema_facturacion_api.Service.UsuarioService
             }
             return _operationResult;
         }
-        public async Task<OperationResultRequest> EliminarUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch)
+        public async Task<OperationResultRequest> CambiarEstadoUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch)
         {
             _operationResult = new OperationResultRequest();
             _usuarios = new TblUsuarios();
@@ -96,17 +113,21 @@ namespace sistema_facturacion_api.Service.UsuarioService
             }
             return _operationResult;
         }
-        public async Task<OperationResultRequest> ListadoDeUsuarios()
+        public async Task<OperationResultRequest> ListadoDeUsuarios(int page, int cantidadDeElemento)
         {
             _operationResult = new OperationResultRequest();
             try
             {
                 List<TblUsuarios> listadoUsuarios = new List<TblUsuarios>();
                 IQueryable<TblUsuarios> query = _dbContext.Usuario.AsQueryable();
-                listadoUsuarios = await query.ToListAsync();
+                listadoUsuarios = await query
+                    .Skip((page - 1) * cantidadDeElemento)
+                    .Take(cantidadDeElemento)
+                    .ToListAsync();
                 _operationResult.Succcess = true;
                 _operationResult.Data = listadoUsuarios;
                 _operationResult.Message = _mesajeExitoso;
+                _operationResult.Paginacion = new Pager(page, cantidadDeElemento, listadoUsuarios.Count());
             }
             catch (Exception ex)
             {
@@ -131,6 +152,27 @@ namespace sistema_facturacion_api.Service.UsuarioService
                 _operationResult.Message = ex.Message;
             }
             return _operationResult;
+        }
+
+        private async Task<bool> ValidarDocumento(string documentoDeIdentidad = null, string pasaporte = null)
+        {
+            bool resp = false;
+            try
+            {
+                if (documentoDeIdentidad != null)
+                {
+                    resp = _dbContext.Usuario.Any(u => u.TarjetaDeIdentificacion.Contains(documentoDeIdentidad));
+                }
+                if (pasaporte != null)
+                {
+                    resp = _dbContext.Usuario.Any(u => u.Pasaporte.Contains(pasaporte));
+                }
+            }
+            catch (Exception ex)
+            {
+                resp = false;
+            }
+            return resp;
         }
     }
 }
