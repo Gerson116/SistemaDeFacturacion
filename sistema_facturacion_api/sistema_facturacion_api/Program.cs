@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using sistema_facturacion_api.Context;
 using sistema_facturacion_api.Data;
 using sistema_facturacion_api.Data.DTOs;
+using sistema_facturacion_api.Service.ProductosServices;
 using sistema_facturacion_api.Service.UsuarioService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,13 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(conf =>
 {
     conf.CreateMap<TblUsuarios, TblUsuariosDTO>().ReverseMap();
+    conf.CreateMap<TblProductos, TblProductosDTO>().ReverseMap();
 });
+
 builder.Services.AddTransient<IUsuarioCRUD, UsuarioCRUD>();
+builder.Services.AddTransient<IProductosServices, SProductosServices>();
+
 string connectionString = "DbFactura";
 builder.Services.AddDbContext<FacturacionDbContext>(conf =>
 {
     conf.UseSqlServer(builder.Configuration.GetConnectionString(connectionString));
 });
+
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
