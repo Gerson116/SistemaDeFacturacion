@@ -16,7 +16,8 @@ namespace sistema_facturacion_api.Service.ProductosServices
     public class SProductosServices : IProductosServices
     {
         private OperationResultRequest _operationResultRequest;
-        private TblProductos _productos;
+        private TblProductosDTO _productos;
+        private List<TblProductosDTO> _listadoDeProductos;
         private IMapper _mapper;
         private FacturacionDbContext _dbContext;
 
@@ -24,15 +25,17 @@ namespace sistema_facturacion_api.Service.ProductosServices
         {
             _mapper = mapper;
             _dbContext = dbContext;
+            _operationResultRequest = new OperationResultRequest();
+            _productos = new TblProductosDTO();
+            _listadoDeProductos = new List<TblProductosDTO>();
         }
 
         public async Task<OperationResultRequest> GetAllProductos(int pagina, int cantidadDeElementos)
         {
-            _operationResultRequest = new OperationResultRequest();
-            List<TblProductos> productos = new List<TblProductos>();
+            List<TblProducto> productos = new List<TblProducto>();
             try
             {
-                IQueryable<TblProductos> query = _dbContext.Producto.AsQueryable();
+                IQueryable<TblProducto> query = _dbContext.Producto.AsQueryable();
                 productos = await query.Skip((pagina - 1) * cantidadDeElementos).Take(cantidadDeElementos).ToListAsync();
                 _operationResultRequest.Succcess = true;
                 _operationResultRequest.Message = "Exito";
@@ -44,32 +47,133 @@ namespace sistema_facturacion_api.Service.ProductosServices
                 _operationResultRequest.Message = ex.Message;
                 _operationResultRequest.Data = null;
             }
-            throw new NotImplementedException();
+            return _operationResultRequest;
         }
-
-        public Task<OperationResultRequest> GetProductosPorId(int productoId)
+        public async Task<OperationResultRequest> GetProductosPorId(int productoId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TblProducto datos = new TblProducto();
+                datos = await _dbContext.Producto.FindAsync(productoId);
+                _productos = _mapper.Map<TblProductosDTO>(datos);
+
+                _operationResultRequest.Succcess = true;
+                _operationResultRequest.Message = "Exito";
+                _operationResultRequest.Data = _productos;
+            }
+            catch (Exception ex)
+            {
+                _operationResultRequest.Succcess = false;
+                _operationResultRequest.Message = ex.Message;
+                _operationResultRequest.Data = null;
+            }
+            return _operationResultRequest;
         }
-
-        public Task<OperationResultRequest> PatchCambiarEstado(int productoId, JsonPatchDocument<TblProductos> jsonPatch)
+        public async Task<OperationResultRequest> PatchCambiarEstado(int productoId, JsonPatchDocument<TblProducto> jsonPatch)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TblProducto datos = new TblProducto();
+                datos = await _dbContext.Producto.FindAsync(productoId);
+                if (jsonPatch != null)
+                {
+                    jsonPatch.ApplyTo(datos);
+                    await _dbContext.SaveChangesAsync();
+
+                    _operationResultRequest.Succcess = true;
+                    _operationResultRequest.Message = "Exito";
+                    _operationResultRequest.Data = null;
+                }
+                else
+                {
+                    _operationResultRequest.Succcess = false;
+                    _operationResultRequest.Message = "Ocurrio un error";
+                    _operationResultRequest.Data = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _operationResultRequest.Succcess = false;
+                _operationResultRequest.Message = ex.Message;
+                _operationResultRequest.Data = null;
+            }
+            return _operationResultRequest;
         }
-
-        public Task<OperationResultRequest> PostBuscarProducto(TblProductosDTO productos)
+        public async Task<OperationResultRequest> PostBuscarProducto(ParametrosDeBusqueda parametros)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TblProducto datos = new TblProducto();
+                if (parametros.Id > 0)
+                {
+                    datos = await _dbContext.Producto.FindAsync(parametros.Id);
+                    _productos = _mapper.Map<TblProductosDTO>(datos);
+
+                    _operationResultRequest.Succcess = true;
+                    _operationResultRequest.Message = "Exito";
+                    _operationResultRequest.Data = _productos;
+                }
+                if (parametros != null)
+                {
+                    List<TblProducto> productos = new List<TblProducto>();
+                    productos = await _dbContext.Producto.Where(p => p.Nombre.Contains(parametros.Nombre)).ToListAsync();
+                    _listadoDeProductos = _mapper.Map<List<TblProductosDTO>>(productos);
+
+                    _operationResultRequest.Succcess = true;
+                    _operationResultRequest.Message = "Exito";
+                    _operationResultRequest.Data = _listadoDeProductos;
+                }
+            }
+            catch (Exception ex)
+            {
+                _operationResultRequest.Succcess = false;
+                _operationResultRequest.Message = ex.Message;
+                _operationResultRequest.Data = null;
+            }
+            return _operationResultRequest;
         }
-
-        public Task<OperationResultRequest> PostNuevoProducto(List<TblProductosDTO> productos)
+        public async Task<OperationResultRequest> PostNuevoProducto(List<TblProductosDTO> productos)
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<TblProducto> datos = new List<TblProducto>();
+                datos = _mapper.Map<List<TblProducto>>(productos);
+                datos.ForEach(x => x.FechaDeCreacion = DateTime.Now);
+                await _dbContext.Producto.AddRangeAsync(datos);
+                await _dbContext.SaveChangesAsync();
+
+                _operationResultRequest.Succcess = true;
+                _operationResultRequest.Message = "Exito";
+                _operationResultRequest.Data = datos;
+            }
+            catch (Exception ex)
+            {
+                _operationResultRequest.Succcess = false;
+                _operationResultRequest.Message = ex.Message;
+                _operationResultRequest.Data = null;
+            }
+            return _operationResultRequest;
         }
-
-        public Task<OperationResultRequest> PutEditarProducto(TblProductosDTO productos)
+        public async Task<OperationResultRequest> PutEditarProducto(TblProductosDTO productos)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TblProducto datos = new TblProducto();
+                datos = _mapper.Map<TblProducto>(productos);
+                _dbContext.Producto.Entry(datos).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+
+                _operationResultRequest.Succcess = true;
+                _operationResultRequest.Message = "Exito";
+                _operationResultRequest.Data = datos;
+            }
+            catch (Exception ex)
+            {
+                _operationResultRequest.Succcess = false;
+                _operationResultRequest.Message = ex.Message;
+                _operationResultRequest.Data = null;
+            }
+            return _operationResultRequest;
         }
     }
 }

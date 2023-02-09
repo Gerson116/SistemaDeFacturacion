@@ -26,6 +26,7 @@
     <ProjectReference Include="..\sistema_facturacion_api.Contexts\sistema_facturacion_api.Contexts.csproj" />
     <ProjectReference Include="..\sistema_facturacion_api.Data\sistema_facturacion_api.Data.csproj" />
     <ProjectReference Include="..\sistema_facturacion_api.Service\sistema_facturacion_api.Service.csproj" />
+    <ProjectReference Include="..\sistema_facturacion_api.Validation\sistema_facturacion_api.Validation.csproj" />
   </ItemGroup>
 
 </Project>

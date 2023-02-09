@@ -14,7 +14,7 @@ namespace sistema_facturacion_api.Data
         public int FacturaId { get; set; }
         public virtual TblFacturas Facturas { get; set; }
         public int ProductoId { get; set; }
-        public virtual TblProductos Producto { get; set; }
+        public virtual TblProducto Producto { get; set; }
         public decimal PrecioUnidad { get; set; }
         public int CantidadProducto { get; set; }
         public DateTime FechaDeRegistro { get; set; }

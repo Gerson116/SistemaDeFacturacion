@@ -153,7 +153,6 @@ namespace sistema_facturacion_api.Service.UsuarioService
             }
             return _operationResult;
         }
-
         private async Task<bool> ValidarDocumento(string documentoDeIdentidad = null, string pasaporte = null)
         {
             bool resp = false;

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sistema_facturacion_api.Context;
 
@@ -11,9 +12,11 @@ using sistema_facturacion_api.Context;
 namespace sistemafacturacionapi.Contexts.Migrations
 {
     [DbContext(typeof(FacturacionDbContext))]
-    partial class FacturacionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230201235732_SecondMigration")]
+    partial class SecondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,7 +328,7 @@ namespace sistemafacturacionapi.Contexts.Migrations
                     b.ToTable("TblPermiso");
                 });
 
-            modelBuilder.Entity("sistema_facturacion_api.Data.TblProducto", b =>
+            modelBuilder.Entity("sistema_facturacion_api.Data.TblProductos", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -429,7 +432,7 @@ namespace sistemafacturacionapi.Contexts.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sistema_facturacion_api.Data.TblProducto", "Producto")
+                    b.HasOne("sistema_facturacion_api.Data.TblProductos", "Producto")
                         .WithMany()
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
