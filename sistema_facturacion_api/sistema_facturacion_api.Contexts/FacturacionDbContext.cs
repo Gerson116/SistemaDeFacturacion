@@ -20,7 +20,7 @@ namespace sistema_facturacion_api.Context
         public DbSet<TblUsuarios> Usuario { get; set; }
         public DbSet<TblRol> Rol { get; set; }
         public DbSet<TblEstado> Estado { get; set; }
-        public DbSet<TblProductos> Producto { get; set; }
+        public DbSet<TblProducto> Producto { get; set; }
         public DbSet<TblMarca> Marca { get; set; }
     }
 }

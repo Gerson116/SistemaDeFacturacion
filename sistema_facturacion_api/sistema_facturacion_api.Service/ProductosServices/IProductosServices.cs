@@ -15,8 +15,8 @@ namespace sistema_facturacion_api.Service.ProductosServices
         Task<OperationResultRequest> GetAllProductos(int pagina, int cantidadDeElementos);
         Task<OperationResultRequest> GetProductosPorId(int productoId);
         Task<OperationResultRequest> PostNuevoProducto(List<TblProductosDTO> productos);
-        Task<OperationResultRequest> PostBuscarProducto(TblProductosDTO productos);
+        Task<OperationResultRequest> PostBuscarProducto(ParametrosDeBusqueda parametros);
         Task<OperationResultRequest> PutEditarProducto(TblProductosDTO productos);
-        Task<OperationResultRequest> PatchCambiarEstado(int productoId, JsonPatchDocument<TblProductos> jsonPatch);
+        Task<OperationResultRequest> PatchCambiarEstado(int productoId, JsonPatchDocument<TblProducto> jsonPatch);
     }
 }
