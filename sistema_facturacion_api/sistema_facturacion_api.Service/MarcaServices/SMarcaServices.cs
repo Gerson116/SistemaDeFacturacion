@@ -34,12 +34,20 @@ namespace sistema_facturacion_api.Service.MarcaServices
                     .Skip((pagina - 1) * cantidadDeElementos)
                     .Take(cantidadDeElementos).ToListAsync();
 
-                _request.Succcess = true;
-                _request.Message = "Exito";
-                _request.Data = listaDeMarcas;
-                _request.Paginacion = new Pager(numeroDePagina: pagina,
-                    cantidadDeElementos: cantidadDeElementos,
-                    totalElementos: query.Count());
+                if (listaDeMarcas.Count > 0)
+                {
+                    _request.Succcess = true;
+                    _request.Message = "Exito";
+                    _request.Data = listaDeMarcas;
+                    _request.Paginacion = new Pager(numeroDePagina: pagina,
+                        cantidadDeElementos: cantidadDeElementos,
+                        totalElementos: query.Count());
+                }
+                else
+                {
+                    _request.Succcess = false;
+                    _request.Data = null;
+                }
             }
             catch (Exception ex)
             {
@@ -142,16 +150,25 @@ namespace sistema_facturacion_api.Service.MarcaServices
         {
             try
             {
-                List<TblMarca> marcas = new List<TblMarca>();
-                marcas = _mapper.Map<List<TblMarca>>(nuevaMarca);
-                marcas.ForEach(x => x.FechaDeCreacion = DateTime.Now);
+                if (nuevaMarca != null)
+                {
+                    List<TblMarca> marcas = new List<TblMarca>();
+                    marcas = _mapper.Map<List<TblMarca>>(nuevaMarca);
+                    marcas.ForEach(x => x.FechaDeCreacion = DateTime.Now);
 
-                await _dbContext.Marca.AddRangeAsync(marcas);
-                await _dbContext.SaveChangesAsync();
+                    await _dbContext.Marca.AddRangeAsync(marcas);
+                    await _dbContext.SaveChangesAsync();
 
-                _request.Succcess = true;
-                _request.Message = "Exito";
-                _request.Data = marcas;
+                    _request.Succcess = true;
+                    _request.Message = "Exito";
+                    _request.Data = marcas;
+                }
+                else
+                {
+                    _request.Succcess = false;
+                    _request.Message = "No se aceptan valores nulos";
+                    _request.Data = null;
+                }
             }
             catch (Exception ex)
             {

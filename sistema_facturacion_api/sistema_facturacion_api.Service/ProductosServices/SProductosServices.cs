@@ -37,9 +37,17 @@ namespace sistema_facturacion_api.Service.ProductosServices
             {
                 IQueryable<TblProducto> query = _dbContext.Producto.AsQueryable();
                 productos = await query.Skip((pagina - 1) * cantidadDeElementos).Take(cantidadDeElementos).ToListAsync();
-                _operationResultRequest.Succcess = true;
-                _operationResultRequest.Message = "Exito";
-                _operationResultRequest.Data = productos;
+                if (productos.Count > 0)
+                {
+                    _operationResultRequest.Succcess = true;
+                    _operationResultRequest.Message = "Exito";
+                    _operationResultRequest.Data = productos;
+                }
+                else
+                {
+                    _operationResultRequest.Succcess = false;
+                    _operationResultRequest.Data = null;
+                }
             }
             catch (Exception ex)
             {
@@ -56,10 +64,18 @@ namespace sistema_facturacion_api.Service.ProductosServices
                 TblProducto datos = new TblProducto();
                 datos = await _dbContext.Producto.FindAsync(productoId);
                 _productos = _mapper.Map<TblProductosDTO>(datos);
-
-                _operationResultRequest.Succcess = true;
-                _operationResultRequest.Message = "Exito";
-                _operationResultRequest.Data = _productos;
+                if (datos != null)
+                {
+                    _operationResultRequest.Succcess = true;
+                    _operationResultRequest.Message = "Exito";
+                    _operationResultRequest.Data = _productos;
+                }
+                else
+                {
+                    _operationResultRequest.Succcess = false;
+                    _operationResultRequest.Message = $"El id: {productoId} no existe";
+                    _operationResultRequest.Data = null;
+                }
             }
             catch (Exception ex)
             {

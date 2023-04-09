@@ -27,11 +27,12 @@ namespace sistema_facturacion_api.Service.UsuarioService
             _dbContext = dbContext;
             _mapper = mapper;
             _usuarios = new TblUsuarios();
+            _encriptarPass = new Encrypt();
         }
+
         public async Task<OperationResultRequest> AgregarUsuario(TblUsuariosDTO usuario)
         {
             _operationResult = new OperationResultRequest();
-            _encriptarPass = new Encrypt();
             try
             {
                 _usuarios = _mapper.Map<TblUsuarios>(usuario);
@@ -42,8 +43,8 @@ namespace sistema_facturacion_api.Service.UsuarioService
                     pasaporte: _usuarios.Pasaporte);
                 if (!resp)
                 {
-                    //await _dbContext.Usuario.AddAsync(_usuarios);
-                    //await _dbContext.SaveChangesAsync();
+                    await _dbContext.Usuario.AddAsync(_usuarios);
+                    await _dbContext.SaveChangesAsync();
                     _operationResult.Succcess = true;
                     _operationResult.Message = _mesajeExitoso;
                     _operationResult.Data = usuario;
@@ -74,10 +75,13 @@ namespace sistema_facturacion_api.Service.UsuarioService
             try
             {
                 _usuarios = _mapper.Map<TblUsuarios>(usuario);
-                _dbContext.Entry(_usuarios).State = EntityState.Modified;
+                _usuarios.Password = _encriptarPass.EncriptingPassword(usuario.Password);
+
+                _dbContext.Usuario.Entry(_usuarios).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
+
                 _operationResult.Succcess = true;
-                _operationResult.Data = usuario;
+                _operationResult.Data = _usuarios;
                 _operationResult.Message = _mesajeExitoso;
             }
             catch (Exception ex)
@@ -142,9 +146,17 @@ namespace sistema_facturacion_api.Service.UsuarioService
             try
             {
                 _usuarios = await _dbContext.Usuario.FindAsync(usuarioId);
-                _operationResult.Succcess = true;
-                _operationResult.Data = _usuarios;
-                _operationResult.Message = _mesajeExitoso;
+                if (_usuarios != null)
+                {
+                    _operationResult.Succcess = true;
+                    _operationResult.Data = _usuarios;
+                    _operationResult.Message = _mesajeExitoso;
+                }
+                else
+                {
+                    _operationResult.Succcess = false;
+                    _operationResult.Message = $"El usuario que intenta buscar no existe.";
+                }
             }
             catch (Exception ex)
             {

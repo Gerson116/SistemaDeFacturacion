@@ -5,6 +5,9 @@ namespace sistema_facturacion_api.Context
 {
     public class FacturacionDbContext : DbContext
     {
+        public FacturacionDbContext()
+        {
+        }
         public FacturacionDbContext(DbContextOptions<FacturacionDbContext> options) : base(options)
         {
         }

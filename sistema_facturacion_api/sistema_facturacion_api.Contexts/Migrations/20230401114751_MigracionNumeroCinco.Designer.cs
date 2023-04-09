@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sistema_facturacion_api.Context;
 
@@ -11,9 +12,11 @@ using sistema_facturacion_api.Context;
 namespace sistemafacturacionapi.Contexts.Migrations
 {
     [DbContext(typeof(FacturacionDbContext))]
-    partial class FacturacionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230401114751_MigracionNumeroCinco")]
+    partial class MigracionNumeroCinco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,9 +180,6 @@ namespace sistemafacturacionapi.Contexts.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("FechaDeCreacion")
                         .HasColumnType("datetime2");
