@@ -13,5 +13,6 @@ namespace sistema_facturacion_api.Data
         public int Id { get; set; }
         public decimal IVA { get; set; }
         public int EmpresaId { get; set; }
+        public bool Estado { get; set; }
     }
 }
