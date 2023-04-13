@@ -42,7 +42,7 @@ namespace sistema_facturacion_api.Controllers
             return _result;
         }
 
-        [HttpPut("PutEditarModulo/{empresaIVAId}")]
+        [HttpPut("PutEditarModulo/{moduloId}")]
         public async Task<ActionResult<OperationResultRequest>> PutEditarModulo([FromBody] TblModuloDTO editarModulo, int moduloId)
         {
             _result = await _moduloServices.PutEditarModulo(editarModulo, moduloId);
