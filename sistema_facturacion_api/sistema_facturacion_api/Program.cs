@@ -4,6 +4,7 @@ using sistema_facturacion_api.Data;
 using sistema_facturacion_api.Data.DTOs;
 using sistema_facturacion_api.Service.CargarArchivoServices;
 using sistema_facturacion_api.Service.EmpresaServices;
+using sistema_facturacion_api.Service.FacturaServices;
 using sistema_facturacion_api.Service.FormaDePagoServices;
 using sistema_facturacion_api.Service.IVAServices;
 using sistema_facturacion_api.Service.MarcaServices;
@@ -24,6 +25,15 @@ builder.Services.AddAutoMapper(conf =>
     conf.CreateMap<TblFormaDePago, TblFormaDePagoDTO>().ReverseMap();
     conf.CreateMap<TblImpuestoAlValorAgregado, IVADTO>().ReverseMap();
     conf.CreateMap<TblModulo, TblModuloDTO>().ReverseMap();
+    conf.CreateMap<TblFacturas, TblFacturasDTO>().ReverseMap();
+    conf.CreateMap<TblDetalleDeFacturas, TblDetalleDeFacturasDTO>()
+    .ForMember(
+        dest => dest.NombreProducto,
+        apt => apt.MapFrom(src => src.Producto.Nombre))
+    .ReverseMap();
+
+    conf.CreateMap<TblFacturas, NuevaFacturaDTO>();
+    conf.CreateMap<TblDetalleDeFacturas, NuevaFacturaDTO>();
 });
 
 builder.Services.AddTransient<IUsuarioCRUD, UsuarioCRUD>();
@@ -34,6 +44,7 @@ builder.Services.AddTransient<ICargarArchivo, SCargarArchivo>();
 builder.Services.AddTransient<IFormaDePago, SFormaDePago>();
 builder.Services.AddTransient<IIVA, SIVA>();
 builder.Services.AddTransient<IModuloServices, SModuloServices>();
+builder.Services.AddTransient<IFacturaServices, SFacturaServices>();
 
 string connectionString = "DbFactura";
 builder.Services.AddDbContext<FacturacionDbContext>(conf =>
