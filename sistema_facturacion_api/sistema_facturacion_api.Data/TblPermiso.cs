@@ -12,7 +12,6 @@ namespace sistema_facturacion_api.Data
     {
         public int Id { get; set; }
         public int UsuarioId { get; set; }
-        public virtual TblUsuarios Usuarios { get; set; }
         public int RolId { get; set; }
         public virtual TblRol Rol { get; set; }
         public int ModuloId { get; set; }
@@ -21,6 +20,7 @@ namespace sistema_facturacion_api.Data
         public bool R { get; set; }
         public bool U { get; set; }
         public bool D { get; set; }
+        public bool Estado { get; set; }
         public DateTime FechaDeCreacion { get; set; }
     }
 }
