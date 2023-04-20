@@ -9,6 +9,7 @@ using sistema_facturacion_api.Service.FormaDePagoServices;
 using sistema_facturacion_api.Service.IVAServices;
 using sistema_facturacion_api.Service.MarcaServices;
 using sistema_facturacion_api.Service.ModuloServices;
+using sistema_facturacion_api.Service.PermisosServices;
 using sistema_facturacion_api.Service.ProductosServices;
 using sistema_facturacion_api.Service.UsuarioService;
 
@@ -32,8 +33,9 @@ builder.Services.AddAutoMapper(conf =>
         apt => apt.MapFrom(src => src.Producto.Nombre))
     .ReverseMap();
 
-    conf.CreateMap<TblFacturas, NuevaFacturaDTO>();
-    conf.CreateMap<TblDetalleDeFacturas, NuevaFacturaDTO>();
+    conf.CreateMap<TblFacturas, NuevaFacturaDTO>().ReverseMap();
+    conf.CreateMap<TblDetalleDeFacturas, NuevaFacturaDTO>().ReverseMap();
+    conf.CreateMap<TblPermiso, TblPermisoDTO>().ReverseMap();
 });
 
 builder.Services.AddTransient<IUsuarioCRUD, UsuarioCRUD>();
@@ -45,6 +47,7 @@ builder.Services.AddTransient<IFormaDePago, SFormaDePago>();
 builder.Services.AddTransient<IIVA, SIVA>();
 builder.Services.AddTransient<IModuloServices, SModuloServices>();
 builder.Services.AddTransient<IFacturaServices, SFacturaServices>();
+builder.Services.AddTransient<IPermisosServices, SPermisosServices>();
 
 string connectionString = "DbFactura";
 builder.Services.AddDbContext<FacturacionDbContext>(conf =>
