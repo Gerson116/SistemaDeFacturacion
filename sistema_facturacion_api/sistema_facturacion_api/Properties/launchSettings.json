@@ -1,33 +1,26 @@
-﻿{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:40531",
-      "sslPort": 44368
-    }
-  },
+{
   "profiles": {
     "http": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5020",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ContenedorImagenEmpresa": "DefaultEndpointsProtocol=https;AccountName=sistemadefacturacionob;AccountKey=Q7VLfiBxrudYIRnWsn2uNCnTDtypZnlqS09yiNjbfEbqJ91ysF4yHWL2iZ3QFw6BoTk51ih5FtT2+AStqfHyEQ==;EndpointSuffix=core.windows.net"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5020"
     },
     "https": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7160;http://localhost:5020",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ContenedorImagenEmpresa": "DefaultEndpointsProtocol=https;AccountName=sistemadefacturacionob;AccountKey=Q7VLfiBxrudYIRnWsn2uNCnTDtypZnlqS09yiNjbfEbqJ91ysF4yHWL2iZ3QFw6BoTk51ih5FtT2+AStqfHyEQ==;EndpointSuffix=core.windows.net"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7160;http://localhost:5020"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -36,6 +29,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:40531",
+      "sslPort": 44368
     }
   }
 }
