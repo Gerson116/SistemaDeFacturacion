@@ -10,8 +10,8 @@
         "DbFacturaDesarrollo": "Data Source = .; Initial Catalog = DbFactura; Integrated Security = True;encrypt=false",
         "jwtkey": "955a6079-7c39-4983-9513-58b7f0d7337f",
         "passwordGenerico": "mkNew123Pass",
-        "correoDesarrollo": "gersondevx@gmail.com",
-        "passwordCorreoDesarrollo": "mkgchalona123"
+        "correoDesarrollo": "gerson_santos_mateo3@outlook.es",
+        "passwordCorreoDesarrollo": "gsm1020304050"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5020",
@@ -26,7 +26,9 @@
         "ContenedorImagenEmpresa": "DefaultEndpointsProtocol=https;AccountName=sistemadefacturacionob;AccountKey=Q7VLfiBxrudYIRnWsn2uNCnTDtypZnlqS09yiNjbfEbqJ91ysF4yHWL2iZ3QFw6BoTk51ih5FtT2+AStqfHyEQ==;EndpointSuffix=core.windows.net",
         "DbFacturaDesarrollo": "Data Source = .; Initial Catalog = DbFactura; Integrated Security = True;encrypt=false",
         "jwtkey": "955a6079-7c39-4983-9513-58b7f0d7337f",
-        "passwordGenerico": "mkNew123Pass"
+        "passwordGenerico": "mkNew123Pass",
+        "correoDesarrollo": "gerson_santos_mateo3@outlook.es",
+        "passwordCorreoDesarrollo": "gsm1020304050"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7160;http://localhost:5020"

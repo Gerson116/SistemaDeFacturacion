@@ -39,23 +39,14 @@ namespace sistema_facturacion_api.Controllers
         [HttpPost("OlvideMiPass")]
         public async Task<OperationResultRequest> OlvideMiPass([FromBody] CambiarPasswordOlvidado cambiarPassword)
         {
-            TblUsuariosDTO objUsuario = new TblUsuariosDTO();
-            objUsuario = await _usuarioServices.GetUsuarioPorEmail(cambiarPassword.Email);
-            if (objUsuario == null)
+            string passwordGenerico = System.Environment.GetEnvironmentVariable("passwordGenerico");
+            string correoDesarrollo = System.Environment.GetEnvironmentVariable("correoDesarrollo");
+            string passwordCorreoDesarrollo = System.Environment.GetEnvironmentVariable("passwordCorreoDesarrollo");
+            
+            _resultRequest = await _manejoDeSesion.OlvideMiPassword(cambiarPassword.Email, passwordGenerico, correoDesarrollo, passwordCorreoDesarrollo);
+            if (_result.Succcess)
             {
-                _resultRequest.Succcess = false;
-                _resultRequest.Message = "No se encontro un usuario con este correo";
-            }
-            else
-            {
-                string passwordGenerico = System.Environment.GetEnvironmentVariable("passwordGenerico");
-                string correoDesarrollo = System.Environment.GetEnvironmentVariable("passwordGenerico");
-                string passwordCorreoDesarrollo = System.Environment.GetEnvironmentVariable("passwordGenerico");
-                _resultRequest = await _manejoDeSesion.OlvideMiPassword(objUsuario, passwordGenerico, correoDesarrollo, passwordCorreoDesarrollo);
-                if (_result.Succcess)
-                {
-                    return _resultRequest;
-                }
+                return _resultRequest;
             }
             return _resultRequest;
         }

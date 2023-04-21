@@ -13,6 +13,6 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
     {
         Task<OperationResultLogin> ConsultarSesion(IniciarSesion iniciarSesion);
         Task<TokenUsuario> ConstruirToken(string email, string nombreDeUsuario);
-        Task<OperationResultRequest> OlvideMiPassword(TblUsuariosDTO usuario, string passwordGenerico, string correo, string password);
+        Task<OperationResultRequest> OlvideMiPassword(string correoCliente, string passwordGenerico, string correoRecuperacion, string password);
     }
 }

@@ -8,8 +8,8 @@ namespace sistema_facturacion_api.Data.ManejoDeSesion
 {
     public class CambiarPasswordOlvidado
     {
-        public string Email { get; set; }
-        public string NewPassword { get; set; }
-        public string ConfirmPassword { get; set; }
+        public string? Email { get; set; }
+        public string? NewPassword { get; set; }
+        public string? ConfirmPassword { get; set; }
     }
 }

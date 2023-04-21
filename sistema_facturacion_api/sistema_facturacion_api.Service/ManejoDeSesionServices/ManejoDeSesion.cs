@@ -5,6 +5,7 @@ using sistema_facturacion_api.Context;
 using sistema_facturacion_api.Data;
 using sistema_facturacion_api.Data.DTOs;
 using sistema_facturacion_api.Data.ManejoDeSesion;
+using sistema_facturacion_api.Service.UsuarioService;
 using sistema_facturacion_api.Useful;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,9 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
         private string _jwtkey = "jwtkey";
         private Encrypt _encrypt;
         private IMapper _mapper;
+        private IUsuarioCRUD _usuarioServices;
 
-        public ManejoDeSesion(FacturacionDbContext dbContext, IMapper mapper)
+        public ManejoDeSesion(FacturacionDbContext dbContext, IMapper mapper, IUsuarioCRUD usuarioServices)
         {
             _dbContext = dbContext;
             _request = new OperationResultRequest();
@@ -41,6 +43,7 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
             _detalleDeSesion = new DetalleDeSesion();
             _encrypt = new Encrypt();
             _mapper = mapper;
+            _usuarioServices = usuarioServices;
         }
         public async Task<TokenUsuario> ConstruirToken(string email, string nombreDeUsuario)
         {
@@ -114,20 +117,25 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
             return _requestLogin;
         }
 
-        public async Task<OperationResultRequest> OlvideMiPassword(TblUsuariosDTO usuario, string passwordGenerico, string correo, string password)
+        public async Task<OperationResultRequest> OlvideMiPassword(string correoCliente, string passwordGenerico, string correoRecuperacion, string password)
         {
             try
             {
-                _usuarios = _mapper.Map<TblUsuarios>(usuario);
-                Encrypt encrypt = new Encrypt();
-                string passwordGenericoEncriptada = encrypt.EncriptingPassword(passwordGenerico);
-                _usuarios.Password = passwordGenericoEncriptada;
-                _dbContext.Entry(_usuarios).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                await SendEmailResetPassword(usuario.Email, passwordGenerico, correo, password);
-                _request.Succcess = true;
-                _request.Message = "Exito";
-                _request.Data = "Se modifico exitosamente la contraseña.";
+                _usuarios = await _dbContext.Usuario.FirstOrDefaultAsync(u => u.Email == correoCliente);
+                if (_usuarios != null)
+                {
+                    Encrypt encrypt = new Encrypt();
+                    string passwordGenericoEncriptada = encrypt.EncriptingPassword(passwordGenerico);
+                    _usuarios.Password = passwordGenericoEncriptada;
+
+                    _dbContext.Entry(_usuarios).State = EntityState.Modified;
+                    await _dbContext.SaveChangesAsync();
+
+                    await SendEmailResetPassword(_usuarios.Email, passwordGenerico, correoRecuperacion, password);
+                    _request.Succcess = true;
+                    _request.Message = "Exito";
+                    _request.Data = "Se modifico exitosamente la contraseña.";
+                }
             }
             catch (Exception ex)
             {
@@ -140,17 +148,25 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
         private async Task SendEmailResetPassword(string email, string passwordGenerico, string correo, string password)
         {
             PasswordResetEmail passwordReset = new PasswordResetEmail();
+
             passwordReset.To = email;
-            passwordReset.From = "gersondevx@gmail.com";
+            passwordReset.From = "gerson_santos_mateo3@outlook.es";
             passwordReset.Subject = "Cambio de contraseña";
             passwordReset.Body = $"Su nueva contraseña es: {passwordGenerico}";
 
-            var smtpClient = new SmtpClient("servidordecorreo.example.com", 587);
-            smtpClient.EnableSsl = false;
-            smtpClient.Credentials = new NetworkCredential(correo, password);
+            var smtpClient = new SmtpClient()
+            {
+                Host = "smtp.office365.com", //... Esto se descomenta en caso de que de error.
+                Port = 587,
+                EnableSsl = true,
+                UseDefaultCredentials = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Credentials = new NetworkCredential(correo, password)
+            };
 
             var mensaje = new MailMessage(passwordReset.From, passwordReset.To, passwordReset.Subject, passwordReset.Body);
             smtpClient.Send(mensaje);
+            smtpClient.Dispose();
         }
 
         private async Task<bool> ValidarExistenciaDelEmail(string email)
