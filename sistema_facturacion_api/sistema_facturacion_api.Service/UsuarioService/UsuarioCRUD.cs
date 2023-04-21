@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace sistema_facturacion_api.Service.UsuarioService
 {
@@ -40,7 +41,7 @@ namespace sistema_facturacion_api.Service.UsuarioService
                 _usuarios.Password = _encriptarPass.EncriptingPassword(usuario.Password);
 
                 bool resp = await ValidarDocumento(documentoDeIdentidad: _usuarios.TarjetaDeIdentificacion,
-                    pasaporte: _usuarios.Pasaporte);
+                    pasaporte: _usuarios.Pasaporte, usuario.Email);
                 if (!resp)
                 {
                     await _dbContext.Usuario.AddAsync(_usuarios);
@@ -55,11 +56,17 @@ namespace sistema_facturacion_api.Service.UsuarioService
                     _operationResult.Message = "Ocurrio un error";
                     _operationResult.Data = $"Los campos TarjetaDeIdentificacion o Pasaporte debe tener datos.";
                 }
+                else if (_usuarios.Email == null)
+                {
+                    _operationResult.Succcess = false;
+                    _operationResult.Message = "Ocurrio un error";
+                    _operationResult.Data = $"Debe ingresar un email.";
+                }
                 else
                 {
                     _operationResult.Succcess = false;
                     _operationResult.Message = "Ocurrio un error";
-                    _operationResult.Data = $"La cedula: {_usuarios.TarjetaDeIdentificacion} o pasaporte: {_usuarios.Pasaporte} ya existe";
+                    _operationResult.Data = $"La cedula: {_usuarios.TarjetaDeIdentificacion}, el pasaporte: {_usuarios.Pasaporte} o el email: {_usuarios.Email} ya existe";
                 }
             }
             catch (Exception ex)
@@ -165,18 +172,42 @@ namespace sistema_facturacion_api.Service.UsuarioService
             }
             return _operationResult;
         }
-        private async Task<bool> ValidarDocumento(string documentoDeIdentidad = null, string pasaporte = null)
+        private async Task<bool> ValidarDocumento(string documentoDeIdentidad = null, string pasaporte = null, string email = null)
         {
             bool resp = false;
+            bool validarDocumentoDeIdentidad = false;
+            bool validarPasaporte = false;
+            bool validarExistenciaDelEmail = false;
+
             try
             {
-                if (documentoDeIdentidad != null)
+                if (documentoDeIdentidad != null && email != null)
                 {
-                    resp = _dbContext.Usuario.Any(u => u.TarjetaDeIdentificacion.Contains(documentoDeIdentidad));
+                    using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        //... Primer paso: se valida si existe el documento de identidad.
+                        validarDocumentoDeIdentidad = await _dbContext.Usuario.AnyAsync(u => u.TarjetaDeIdentificacion.Contains(documentoDeIdentidad));
+
+                        //... Segundo paso: se valida si existe algun email
+                        validarExistenciaDelEmail = await _dbContext.Usuario.AnyAsync(x => x.Email.Contains(email));
+                        resp = (validarDocumentoDeIdentidad == validarExistenciaDelEmail) ? false : true;
+                        scope.Complete();
+                    }
+                    return resp;
                 }
-                if (pasaporte != null)
+                if (pasaporte != null && email != null)
                 {
-                    resp = _dbContext.Usuario.Any(u => u.Pasaporte.Contains(pasaporte));
+                    using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        //... Primer paso: se valida si existe el pasaporte.
+                        validarDocumentoDeIdentidad = await _dbContext.Usuario.AnyAsync(u => u.Pasaporte.Contains(pasaporte));
+
+                        //... Segundo paso: se valida si existe algun email
+                        validarExistenciaDelEmail = await _dbContext.Usuario.AnyAsync(x => x.Email.Contains(email));
+                        resp = (validarDocumentoDeIdentidad == validarExistenciaDelEmail) ? false : true;
+                        scope.Complete();
+                    }
+                    return resp;
                 }
             }
             catch (Exception ex)
@@ -184,6 +215,21 @@ namespace sistema_facturacion_api.Service.UsuarioService
                 resp = false;
             }
             return resp;
+        }
+
+        public async Task<TblUsuariosDTO> GetUsuarioPorEmail(string email)
+        {
+            TblUsuariosDTO objUsuario = new TblUsuariosDTO();
+            try
+            {
+                _usuarios = await _dbContext.Usuario.Where(x => x.Email == email).FirstAsync();
+                objUsuario = _mapper.Map<TblUsuariosDTO>(_usuarios);
+            }
+            catch (Exception ex)
+            {
+                objUsuario = null;
+            }
+            return objUsuario;
         }
     }
 }

@@ -7,11 +7,13 @@ using sistema_facturacion_api.Service.MarcaServices;
 using sistema_facturacion_api.Useful;
 using sistema_facturacion_api.Validation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 
 namespace sistema_facturacion_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("policy")]
     public class MarcaController : ControllerBase
     {
         private IMarcaServices _marcaServices;

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "sistema_facturacion_api.Service": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "correoDesarrollo": "gersondevx@gmail.com",
+        "passwordCorreodesarrollo": "mkgchalona123"
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sistema_facturacion_api.Data.DTOs;
 using sistema_facturacion_api.Service.IVAServices;
@@ -8,6 +9,7 @@ namespace sistema_facturacion_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("policy")]
     public class IVAController : ControllerBase
     {
         private IIVA _ivaServices;
