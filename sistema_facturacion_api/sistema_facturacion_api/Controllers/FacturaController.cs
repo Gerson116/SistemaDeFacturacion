@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using sistema_facturacion_api.Data.DTOs;
@@ -9,6 +10,7 @@ namespace sistema_facturacion_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("policy")]
     public class FacturaController : ControllerBase
     {
         private OperationResultRequest _result;

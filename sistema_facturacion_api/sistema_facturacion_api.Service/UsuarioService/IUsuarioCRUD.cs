@@ -19,5 +19,6 @@ namespace sistema_facturacion_api.Service.UsuarioService
         Task<OperationResultRequest> AgregarUsuario(TblUsuariosDTO usuario);
         Task<OperationResultRequest> EditarUsuario(TblUsuariosDTO usuario);
         Task<OperationResultRequest> CambiarEstadoUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch);
+        Task<TblUsuariosDTO> GetUsuarioPorEmail(string email);
     }
 }

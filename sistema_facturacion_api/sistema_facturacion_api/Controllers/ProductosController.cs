@@ -1,6 +1,7 @@
 ﻿using Azure;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using sistema_facturacion_api.Data;
@@ -16,6 +17,7 @@ namespace sistema_facturacion_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("policy")]
     public class ProductosController : ControllerBase
     {
         private IProductosServices _productosServices;
