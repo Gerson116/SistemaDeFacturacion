@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'sistema-facturacion-front';
+
+  constructor(){
+  }
+
+  helloWorld(){
+    console.log("prueba")
+  }
 }
