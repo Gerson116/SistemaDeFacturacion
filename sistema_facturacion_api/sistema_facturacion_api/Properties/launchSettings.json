@@ -1,33 +1,37 @@
-﻿{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:40531",
-      "sslPort": 44368
-    }
-  },
+{
   "profiles": {
     "http": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5020",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ContenedorImagenEmpresa": "DefaultEndpointsProtocol=https;AccountName=sistemadefacturacionob;AccountKey=Q7VLfiBxrudYIRnWsn2uNCnTDtypZnlqS09yiNjbfEbqJ91ysF4yHWL2iZ3QFw6BoTk51ih5FtT2+AStqfHyEQ==;EndpointSuffix=core.windows.net",
+        "DbFacturaDesarrollo": "Data Source = .; Initial Catalog = DbFactura; Integrated Security = True;encrypt=false",
+        "jwtkey": "955a6079-7c39-4983-9513-58b7f0d7337f",
+        "passwordGenerico": "mkNew123Pass",
+        "correoDesarrollo": "gerson_santos_mateo3@outlook.es",
+        "passwordCorreoDesarrollo": "gsm1020304050"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5020",
+      "sqlDebugging": true
     },
     "https": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7160;http://localhost:5020",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ContenedorImagenEmpresa": "DefaultEndpointsProtocol=https;AccountName=sistemadefacturacionob;AccountKey=Q7VLfiBxrudYIRnWsn2uNCnTDtypZnlqS09yiNjbfEbqJ91ysF4yHWL2iZ3QFw6BoTk51ih5FtT2+AStqfHyEQ==;EndpointSuffix=core.windows.net",
+        "DbFacturaDesarrollo": "Data Source = .; Initial Catalog = DbFactura; Integrated Security = True;encrypt=false",
+        "jwtkey": "955a6079-7c39-4983-9513-58b7f0d7337f",
+        "passwordGenerico": "mkNew123Pass",
+        "correoDesarrollo": "gerson_santos_mateo3@outlook.es",
+        "passwordCorreoDesarrollo": "gsm1020304050"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7160;http://localhost:5020"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -36,6 +40,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:40531",
+      "sslPort": 44368
     }
   }
 }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace sistema_facturacion_api.Service.UsuarioService
 {
@@ -27,22 +28,46 @@ namespace sistema_facturacion_api.Service.UsuarioService
             _dbContext = dbContext;
             _mapper = mapper;
             _usuarios = new TblUsuarios();
+            _encriptarPass = new Encrypt();
         }
+
         public async Task<OperationResultRequest> AgregarUsuario(TblUsuariosDTO usuario)
         {
             _operationResult = new OperationResultRequest();
-            _encriptarPass = new Encrypt();
             try
             {
                 _usuarios = _mapper.Map<TblUsuarios>(usuario);
                 _usuarios.FechaDeCreacion = DateTime.Now;
                 _usuarios.Password = _encriptarPass.EncriptingPassword(usuario.Password);
-                await _dbContext.Usuario.AddAsync(_usuarios);
-                await _dbContext.SaveChangesAsync();
 
-                _operationResult.Succcess = true;
-                _operationResult.Message = _mesajeExitoso;
-                _operationResult.Data = usuario;
+                bool resp = await ValidarDocumento(documentoDeIdentidad: _usuarios.TarjetaDeIdentificacion,
+                    pasaporte: _usuarios.Pasaporte, usuario.Email);
+                if (!resp)
+                {
+                    await _dbContext.Usuario.AddAsync(_usuarios);
+                    await _dbContext.SaveChangesAsync();
+                    _operationResult.Succcess = true;
+                    _operationResult.Message = _mesajeExitoso;
+                    _operationResult.Data = usuario;
+                }
+                else if (_usuarios.TarjetaDeIdentificacion == null && _usuarios.Pasaporte == null)
+                {
+                    _operationResult.Succcess = false;
+                    _operationResult.Message = "Ocurrio un error";
+                    _operationResult.Data = $"Los campos TarjetaDeIdentificacion o Pasaporte debe tener datos.";
+                }
+                else if (_usuarios.Email == null)
+                {
+                    _operationResult.Succcess = false;
+                    _operationResult.Message = "Ocurrio un error";
+                    _operationResult.Data = $"Debe ingresar un email.";
+                }
+                else
+                {
+                    _operationResult.Succcess = false;
+                    _operationResult.Message = "Ocurrio un error";
+                    _operationResult.Data = $"La cedula: {_usuarios.TarjetaDeIdentificacion}, el pasaporte: {_usuarios.Pasaporte} o el email: {_usuarios.Email} ya existe";
+                }
             }
             catch (Exception ex)
             {
@@ -57,10 +82,13 @@ namespace sistema_facturacion_api.Service.UsuarioService
             try
             {
                 _usuarios = _mapper.Map<TblUsuarios>(usuario);
-                _dbContext.Entry(_usuarios).State = EntityState.Modified;
+                _usuarios.Password = _encriptarPass.EncriptingPassword(usuario.Password);
+
+                _dbContext.Usuario.Entry(_usuarios).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
+
                 _operationResult.Succcess = true;
-                _operationResult.Data = usuario;
+                _operationResult.Data = _usuarios;
                 _operationResult.Message = _mesajeExitoso;
             }
             catch (Exception ex)
@@ -70,7 +98,7 @@ namespace sistema_facturacion_api.Service.UsuarioService
             }
             return _operationResult;
         }
-        public async Task<OperationResultRequest> EliminarUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch)
+        public async Task<OperationResultRequest> CambiarEstadoUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch)
         {
             _operationResult = new OperationResultRequest();
             _usuarios = new TblUsuarios();
@@ -96,17 +124,21 @@ namespace sistema_facturacion_api.Service.UsuarioService
             }
             return _operationResult;
         }
-        public async Task<OperationResultRequest> ListadoDeUsuarios()
+        public async Task<OperationResultRequest> ListadoDeUsuarios(int page, int cantidadDeElemento)
         {
             _operationResult = new OperationResultRequest();
             try
             {
                 List<TblUsuarios> listadoUsuarios = new List<TblUsuarios>();
                 IQueryable<TblUsuarios> query = _dbContext.Usuario.AsQueryable();
-                listadoUsuarios = await query.ToListAsync();
+                listadoUsuarios = await query
+                    .Skip((page - 1) * cantidadDeElemento)
+                    .Take(cantidadDeElemento)
+                    .ToListAsync();
                 _operationResult.Succcess = true;
                 _operationResult.Data = listadoUsuarios;
                 _operationResult.Message = _mesajeExitoso;
+                _operationResult.Paginacion = new Pager(page, cantidadDeElemento, listadoUsuarios.Count());
             }
             catch (Exception ex)
             {
@@ -121,9 +153,17 @@ namespace sistema_facturacion_api.Service.UsuarioService
             try
             {
                 _usuarios = await _dbContext.Usuario.FindAsync(usuarioId);
-                _operationResult.Succcess = true;
-                _operationResult.Data = _usuarios;
-                _operationResult.Message = _mesajeExitoso;
+                if (_usuarios != null)
+                {
+                    _operationResult.Succcess = true;
+                    _operationResult.Data = _usuarios;
+                    _operationResult.Message = _mesajeExitoso;
+                }
+                else
+                {
+                    _operationResult.Succcess = false;
+                    _operationResult.Message = $"El usuario que intenta buscar no existe.";
+                }
             }
             catch (Exception ex)
             {
@@ -131,6 +171,65 @@ namespace sistema_facturacion_api.Service.UsuarioService
                 _operationResult.Message = ex.Message;
             }
             return _operationResult;
+        }
+        private async Task<bool> ValidarDocumento(string documentoDeIdentidad = null, string pasaporte = null, string email = null)
+        {
+            bool resp = false;
+            bool validarDocumentoDeIdentidad = false;
+            bool validarPasaporte = false;
+            bool validarExistenciaDelEmail = false;
+
+            try
+            {
+                if (documentoDeIdentidad != null && email != null)
+                {
+                    using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        //... Primer paso: se valida si existe el documento de identidad.
+                        validarDocumentoDeIdentidad = await _dbContext.Usuario.AnyAsync(u => u.TarjetaDeIdentificacion.Contains(documentoDeIdentidad));
+
+                        //... Segundo paso: se valida si existe algun email
+                        validarExistenciaDelEmail = await _dbContext.Usuario.AnyAsync(x => x.Email.Contains(email));
+                        resp = (validarDocumentoDeIdentidad == validarExistenciaDelEmail) ? false : true;
+                        scope.Complete();
+                    }
+                    return resp;
+                }
+                if (pasaporte != null && email != null)
+                {
+                    using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        //... Primer paso: se valida si existe el pasaporte.
+                        validarDocumentoDeIdentidad = await _dbContext.Usuario.AnyAsync(u => u.Pasaporte.Contains(pasaporte));
+
+                        //... Segundo paso: se valida si existe algun email
+                        validarExistenciaDelEmail = await _dbContext.Usuario.AnyAsync(x => x.Email.Contains(email));
+                        resp = (validarDocumentoDeIdentidad == validarExistenciaDelEmail) ? false : true;
+                        scope.Complete();
+                    }
+                    return resp;
+                }
+            }
+            catch (Exception ex)
+            {
+                resp = false;
+            }
+            return resp;
+        }
+
+        public async Task<TblUsuariosDTO> GetUsuarioPorEmail(string email)
+        {
+            TblUsuariosDTO objUsuario = new TblUsuariosDTO();
+            try
+            {
+                _usuarios = await _dbContext.Usuario.Where(x => x.Email == email).FirstAsync();
+                objUsuario = _mapper.Map<TblUsuariosDTO>(_usuarios);
+            }
+            catch (Exception ex)
+            {
+                objUsuario = null;
+            }
+            return objUsuario;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace sistemafacturacionapi.Contexts.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -59,9 +59,6 @@ namespace sistemafacturacionapi.Contexts.Migrations
                     b.Property<int>("FacturaId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FacturasId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaDeRegistro")
                         .HasColumnType("datetime2");
 
@@ -72,8 +69,6 @@ namespace sistemafacturacionapi.Contexts.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FacturasId");
 
                     b.HasIndex("ProductoId");
 
@@ -95,10 +90,7 @@ namespace sistemafacturacionapi.Contexts.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuariosId")
+                    b.Property<int>("TblUsuariosId")
                         .HasColumnType("int");
 
                     b.Property<string>("rutaImagen")
@@ -107,7 +99,7 @@ namespace sistemafacturacionapi.Contexts.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuariosId");
+                    b.HasIndex("TblUsuariosId");
 
                     b.ToTable("TblEmpresas");
                 });
@@ -146,6 +138,9 @@ namespace sistemafacturacionapi.Contexts.Migrations
                     b.Property<int>("EmpresaId")
                         .HasColumnType("int");
 
+                    b.Property<int>("EstadoFacturaId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaDeCreacion")
                         .HasColumnType("datetime2");
 
@@ -181,6 +176,9 @@ namespace sistemafacturacionapi.Contexts.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("FechaDeCreacion")
                         .HasColumnType("datetime2");
 
@@ -203,6 +201,9 @@ namespace sistemafacturacionapi.Contexts.Migrations
 
                     b.Property<int>("EmpresaId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("IVA")
                         .HasColumnType("decimal(18,2)");
@@ -240,6 +241,9 @@ namespace sistemafacturacionapi.Contexts.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("EstadoId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaDeCreacion")
                         .HasColumnType("datetime2");
 
@@ -259,6 +263,9 @@ namespace sistemafacturacionapi.Contexts.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("FechaDeCreacion")
                         .HasColumnType("datetime2");
@@ -290,6 +297,9 @@ namespace sistemafacturacionapi.Contexts.Migrations
                     b.Property<bool>("D")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("FechaDeCreacion")
                         .HasColumnType("datetime2");
 
@@ -308,27 +318,25 @@ namespace sistemafacturacionapi.Contexts.Migrations
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsuariosId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ModuloId");
 
                     b.HasIndex("RolId");
 
-                    b.HasIndex("UsuariosId");
-
                     b.ToTable("TblPermiso");
                 });
 
-            modelBuilder.Entity("sistema_facturacion_api.Data.TblProductos", b =>
+            modelBuilder.Entity("sistema_facturacion_api.Data.TblProducto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EstadoId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("FechaDeCreacion")
                         .HasColumnType("datetime2");
@@ -417,32 +425,22 @@ namespace sistemafacturacionapi.Contexts.Migrations
 
             modelBuilder.Entity("sistema_facturacion_api.Data.TblDetalleDeFacturas", b =>
                 {
-                    b.HasOne("sistema_facturacion_api.Data.TblFacturas", "Facturas")
-                        .WithMany()
-                        .HasForeignKey("FacturasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("sistema_facturacion_api.Data.TblProductos", "Producto")
+                    b.HasOne("sistema_facturacion_api.Data.TblProducto", "Producto")
                         .WithMany()
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Facturas");
 
                     b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("sistema_facturacion_api.Data.TblEmpresas", b =>
                 {
-                    b.HasOne("sistema_facturacion_api.Data.TblUsuarios", "Usuarios")
+                    b.HasOne("sistema_facturacion_api.Data.TblUsuarios", null)
                         .WithMany("Empresas")
-                        .HasForeignKey("UsuariosId")
+                        .HasForeignKey("TblUsuariosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("sistema_facturacion_api.Data.TblPermiso", b =>
@@ -459,17 +457,9 @@ namespace sistemafacturacionapi.Contexts.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sistema_facturacion_api.Data.TblUsuarios", "Usuarios")
-                        .WithMany()
-                        .HasForeignKey("UsuariosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Modulo");
 
                     b.Navigation("Rol");
-
-                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("sistema_facturacion_api.Data.TblUsuarios", b =>

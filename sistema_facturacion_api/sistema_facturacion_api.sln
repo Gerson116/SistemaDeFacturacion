@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sistema_facturacion_api.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sistema_facturacion_api.Service", "sistema_facturacion_api.Service\sistema_facturacion_api.Service.csproj", "{D3ECF07D-B737-4D7E-83D5-3CA1951E7807}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sistema_facturacion_api.Test", "sistema_facturacion_api.Test\sistema_facturacion_api.Test.csproj", "{3897F9DB-CBCD-4CB4-90F5-41D890E76FEA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sistema_facturacion_api.Contexts", "sistema_facturacion_api.Contexts\sistema_facturacion_api.Contexts.csproj", "{60A0A6C4-AB9D-4A74-A3C3-F68D33D851BC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sistema_facturacion_api.Useful", "sistema_facturacion_api.Useful\sistema_facturacion_api.Useful.csproj", "{BB8B714C-277A-4418-9671-CA83068C5D37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sistema_facturacion_api.Validation", "sistema_facturacion_api.Validation\sistema_facturacion_api.Validation.csproj", "{278CF738-BD8F-4745-889D-BAD539196F01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sistema_facturacion_api.Validation", "sistema_facturacion_api.Validation\sistema_facturacion_api.Validation.csproj", "{278CF738-BD8F-4745-889D-BAD539196F01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sistema_facturacion.Test", "sistema_facturacion.Test\sistema_facturacion.Test.csproj", "{FA1AFBF7-E030-4594-B90C-98D019EDC5D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,6 @@ Global
 		{D3ECF07D-B737-4D7E-83D5-3CA1951E7807}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3ECF07D-B737-4D7E-83D5-3CA1951E7807}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3ECF07D-B737-4D7E-83D5-3CA1951E7807}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3897F9DB-CBCD-4CB4-90F5-41D890E76FEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3897F9DB-CBCD-4CB4-90F5-41D890E76FEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3897F9DB-CBCD-4CB4-90F5-41D890E76FEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3897F9DB-CBCD-4CB4-90F5-41D890E76FEA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60A0A6C4-AB9D-4A74-A3C3-F68D33D851BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60A0A6C4-AB9D-4A74-A3C3-F68D33D851BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60A0A6C4-AB9D-4A74-A3C3-F68D33D851BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{278CF738-BD8F-4745-889D-BAD539196F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{278CF738-BD8F-4745-889D-BAD539196F01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{278CF738-BD8F-4745-889D-BAD539196F01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA1AFBF7-E030-4594-B90C-98D019EDC5D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA1AFBF7-E030-4594-B90C-98D019EDC5D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA1AFBF7-E030-4594-B90C-98D019EDC5D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA1AFBF7-E030-4594-B90C-98D019EDC5D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

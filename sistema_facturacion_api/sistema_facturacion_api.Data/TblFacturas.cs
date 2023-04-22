@@ -20,5 +20,6 @@ namespace sistema_facturacion_api.Data
         public decimal IVA { get; set; }
         public decimal TotalPagado { get; set; }
         public int FormaDePagoId { get; set; }
+        public int EstadoFacturaId { get; set; }
     }
 }
