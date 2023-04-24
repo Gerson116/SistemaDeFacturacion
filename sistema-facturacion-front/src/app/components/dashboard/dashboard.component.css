@@ -1,0 +1,22 @@
+
+.menuVertical{
+  height: 100vh;
+}
+.menuVerticalDetalle{
+  background: #b1c0c8;
+  border-right: 1px solid #000;
+}
+.imagenCentralizada{
+  display: flex;
+  justify-content: center;
+  background: #b1c0c8;
+  border-right: 1px solid #000;
+}
+.imagenRedondeada{
+  border-radius: 800px;
+  width: 150px;
+}
+
+.prueba{
+  font-size: 20px;
+}

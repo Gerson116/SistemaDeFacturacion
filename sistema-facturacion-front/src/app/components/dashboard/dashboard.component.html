@@ -1,1 +1,22 @@
-<p>dashboard works!</p>
+<!--
+<div class="row">
+  <div class="col-md-3 imagenCentralizada">
+    <img src="https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1-1024x899.jpg" alt="imagen" class="img-fluid imagenRedondeada">
+  </div>
+</div> -->
+
+<div class="row menuVertical">
+  <div class="col-md-3 menuVerticalDetalle">
+    <img src="https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1-1024x899.jpg" alt="imagen" class="img-fluid imagenRedondeada imagenCentralizada">
+    <dx-tree-view
+    class="prueba"
+    [dataSource]="continentsMenu"
+    selectionMode="single"
+    [selectByClick]="true">
+    </dx-tree-view>
+  </div>
+
+  <div class="col-md-9">
+    prueba
+  </div>
+</div>

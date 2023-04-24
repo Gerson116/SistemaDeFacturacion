@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'registrar-usuario',
     loadChildren: () => import('./components/user-register/user-register.module').then(m => m.UserRegisterModule)
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule)
   }
 ];
 
