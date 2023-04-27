@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxDrawerModule, DxListModule, DxTabPanelModule, DxTemplateModule, DxTreeViewModule } from 'devextreme-angular';
-import { DashboardComponent } from './dashboard.component';
-import { DashboardRoutingModule } from './dashboard.routing.module';
+import { PerfilComponent } from './perfil.component';
+import { PerfilRoutingModule } from './perfil.routing.module';
+import { DashboardModule } from '../dashboard/dashboard.module';
 
 
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    PerfilComponent
   ],
   imports: [
     CommonModule,
@@ -17,9 +18,11 @@ import { DashboardRoutingModule } from './dashboard.routing.module';
     DxTemplateModule,
     DxDrawerModule,
     DxListModule,
-    DashboardRoutingModule
+
+    PerfilRoutingModule,
+    DashboardModule
   ],
-  bootstrap: [DashboardComponent],
-  exports:[DashboardComponent]
+  bootstrap: [PerfilComponent],
+  exports:[PerfilComponent]
 })
-export class DashboardModule { }
+export class PerfilModule { }

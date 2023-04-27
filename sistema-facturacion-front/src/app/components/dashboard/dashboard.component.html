@@ -1,22 +1,34 @@
-<!--
-<div class="row">
-  <div class="col-md-3 imagenCentralizada">
-    <img src="https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1-1024x899.jpg" alt="imagen" class="img-fluid imagenRedondeada">
-  </div>
-</div> -->
 
-<div class="row menuVertical">
-  <div class="col-md-3 menuVerticalDetalle">
-    <img src="https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1-1024x899.jpg" alt="imagen" class="img-fluid imagenRedondeada imagenCentralizada">
-    <dx-tree-view
-    class="prueba"
-    [dataSource]="continentsMenu"
-    selectionMode="single"
-    [selectByClick]="true">
-    </dx-tree-view>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Menú Sandiwch -->
+      <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuVertical" aria-controls="menuVertical">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
   </div>
+</nav>
 
-  <div class="col-md-9">
-    prueba
+<div class="offcanvas offcanvas-start menuVertical" tabindex="-1" id="menuVertical" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menú</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>
+      <img src="https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1-1024x899.jpg" alt="imagen" class="img-fluid imagenRedondeada imagenCentralizada">
+      <p>
+        La practica hace al maestro :)
+      </p>
+    </div>
+    <div>
+      <dx-tree-view
+      class="prueba"
+      [dataSource]="continentsMenu"
+      selectionMode="single"
+      [selectByClick]="true">
+      </dx-tree-view>
+    </div>
   </div>
 </div>

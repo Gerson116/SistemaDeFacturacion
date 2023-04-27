@@ -4,6 +4,10 @@ import { AppComponent } from './app.component';
 
 const routes: Routes = [
   {
+    path: '',
+    loadChildren: () => import('./components/login/login.module').then(m => m.LoginModule)
+  },
+  {
     path: 'login',
     loadChildren: () => import('./components/login/login.module').then(m => m.LoginModule)
   },
@@ -18,6 +22,10 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./components/perfil/perfil.module').then(m => m.PerfilModule)
   }
 ];
 
