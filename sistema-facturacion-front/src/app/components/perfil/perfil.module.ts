@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DxDrawerModule, DxListModule, DxTabPanelModule, DxTemplateModule, DxTreeViewModule } from 'devextreme-angular';
+import { DxChartModule, DxDrawerModule, DxListModule, DxTabPanelModule, DxTemplateModule, DxTreeViewModule } from 'devextreme-angular';
 import { PerfilComponent } from './perfil.component';
 import { PerfilRoutingModule } from './perfil.routing.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
@@ -18,6 +18,7 @@ import { DashboardModule } from '../dashboard/dashboard.module';
     DxTemplateModule,
     DxDrawerModule,
     DxListModule,
+    DxChartModule,
 
     PerfilRoutingModule,
     DashboardModule
