@@ -1,18 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserRegisterComponent } from './user-register.component';
-import { UserRegisterRoutingModule } from './user-register.routing.module';
 import { DxButtonModule, DxCheckBoxModule, DxDateBoxModule, DxRadioGroupModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-angular';
+import { DashboardModule } from '../../dashboard/dashboard.module';
+import { RoleListRoutingModule } from './role-list.routing.module';
+import { RoleListComponent } from './role-list.component';
 
 
 
 @NgModule({
   declarations: [
-    UserRegisterComponent
+    RoleListComponent
   ],
   imports: [
     CommonModule,
-    UserRegisterRoutingModule,
+    RoleListRoutingModule,
+    DashboardModule,
     DxSelectBoxModule,
     DxTextBoxModule,
     DxDateBoxModule,
@@ -21,6 +23,6 @@ import { DxButtonModule, DxCheckBoxModule, DxDateBoxModule, DxRadioGroupModule, 
     DxRadioGroupModule,
     DxButtonModule
   ],
-  exports: [UserRegisterComponent]
+  exports: [RoleListComponent]
 })
-export class UserRegisterModule { }
+export class RoleListModule { }

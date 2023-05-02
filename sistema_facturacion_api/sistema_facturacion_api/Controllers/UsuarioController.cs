@@ -11,7 +11,7 @@ namespace sistema_facturacion_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize("policy")]
+    //[Authorize("policy")]
     public class UsuarioController : ControllerBase
     {
         private IUsuarioCRUD _usuarioCRUD;

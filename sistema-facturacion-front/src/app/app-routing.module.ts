@@ -17,7 +17,11 @@ const routes: Routes = [
   },
   {
     path: 'registrar-usuario',
-    loadChildren: () => import('./components/user-register/user-register.module').then(m => m.UserRegisterModule)
+    loadChildren: () => import('./components/users/user-register/user-register.module').then(m => m.UserRegisterModule)
+  },
+  {
+    path: 'listado-usuario',
+    loadChildren: () => import('./components/users/user-list/user-list.module').then(m => m.UserListModule)
   },
   {
     path: 'dashboard',
@@ -25,7 +29,23 @@ const routes: Routes = [
   },
   {
     path: 'perfil',
-    loadChildren: () => import('./components/perfil/perfil.module').then(m => m.PerfilModule)
+    loadChildren: () => import('./components/users/perfil/perfil.module').then(m => m.PerfilModule)
+  },
+  {
+    path: 'listado-roles',
+    loadChildren: () => import('./components/role/role-list/role-list.module').then(m => m.RoleListModule)
+  },
+  {
+    path: 'listado-permisos',
+    loadChildren: () => import('./components/permission/permission-list/permission-list.module').then(m => m.PermissionListModule)
+  },
+  {
+    path: 'listado-ventas',
+    loadChildren: () => import('./components/sales/sales-list/sales-list.module').then(m => m.SalesListModule)
+  },
+  {
+    path: 'nueva-venta',
+    loadChildren: () => import('./components/sales/add-sales/add-sales.module').then(m => m.AddSalesModule)
   }
 ];
 
