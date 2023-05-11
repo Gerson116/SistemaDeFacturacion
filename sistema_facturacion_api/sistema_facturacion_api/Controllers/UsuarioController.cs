@@ -6,6 +6,7 @@ using sistema_facturacion_api.Data;
 using sistema_facturacion_api.Data.DTOs;
 using sistema_facturacion_api.Service.UsuarioService;
 using sistema_facturacion_api.Useful;
+using sistema_facturacion_api.Useful.Filtros;
 
 namespace sistema_facturacion_api.Controllers
 {
@@ -48,6 +49,15 @@ namespace sistema_facturacion_api.Controllers
             _operationResultRequest = await _usuarioCRUD.AgregarUsuario(usuario);
             return _operationResultRequest;
         }
+        
+        [HttpPost("BuscarUsuarios")]
+        public async Task<ActionResult<OperationResultRequest>> BuscarUsuarios([FromBody] FiltroUsuario parametros)
+        {
+            _operationResultRequest = new OperationResultRequest();
+            _operationResultRequest = await _usuarioCRUD.BuscarUsuarios(parametros);
+            return _operationResultRequest;
+        }
+
         [HttpPut("EditarUsuario")]
         public async Task<ActionResult<OperationResultRequest>> EditarUsuario([FromBody] TblUsuariosDTO usuario)
         {

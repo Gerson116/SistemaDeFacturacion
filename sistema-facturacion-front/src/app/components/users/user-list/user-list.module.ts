@@ -5,10 +5,14 @@ import { UserListRoutingModule } from './user-list.routing.module';
 import { DashboardModule } from '../../dashboard/dashboard.module';
 import { HttpClientModule } from '@angular/common/http';
 import { UserListComponent } from './user-list.component';
+import { UsersService } from 'src/app/services/users/users.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { UserMaintenanceComponent } from '../user-maintenance/user-maintenance.component';
 
 @NgModule({
   declarations: [
-    UserListComponent
+    UserListComponent,
+    UserMaintenanceComponent
   ],
   imports: [
     CommonModule,
@@ -22,8 +26,10 @@ import { UserListComponent } from './user-list.component';
     DxRadioGroupModule,
     DxButtonModule,
     DxDataGridModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
-  exports: [UserListComponent]
+  exports: [UserListComponent],
+  providers: [UsersService]
 })
 export class UserListModule { }

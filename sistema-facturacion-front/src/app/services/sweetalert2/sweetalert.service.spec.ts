@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PerfilService } from './perfil.service';
+import { SweetalertService } from './sweetalert.service';
 
-describe('PerfilService', () => {
-  let service: PerfilService;
+describe('SweetalertService', () => {
+  let service: SweetalertService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PerfilService);
+    service = TestBed.inject(SweetalertService);
   });
 
   it('should be created', () => {

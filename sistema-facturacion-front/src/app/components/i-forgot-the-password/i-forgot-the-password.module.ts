@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LoginRoutingModule } from './i-forgot-the-password.routing.module';
 import { IForgotThePasswordComponent } from './i-forgot-the-password.component';
 import { DxButtonModule } from 'devextreme-angular';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -13,7 +14,8 @@ import { DxButtonModule } from 'devextreme-angular';
   imports: [
     CommonModule,
     DxButtonModule,
-    LoginRoutingModule
+    LoginRoutingModule,
+    ReactiveFormsModule
   ],
   exports: [IForgotThePasswordComponent]
 })

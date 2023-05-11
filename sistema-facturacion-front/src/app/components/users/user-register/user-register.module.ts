@@ -4,6 +4,7 @@ import { UserRegisterComponent } from './user-register.component';
 import { UserRegisterRoutingModule } from './user-register.routing.module';
 import { DxButtonModule, DxCheckBoxModule, DxDateBoxModule, DxRadioGroupModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-angular';
 import { DashboardModule } from '../../dashboard/dashboard.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -21,7 +22,8 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
     DxValidatorModule,
     DxCheckBoxModule,
     DxRadioGroupModule,
-    DxButtonModule
+    DxButtonModule,
+    ReactiveFormsModule
   ],
   exports: [UserRegisterComponent]
 })

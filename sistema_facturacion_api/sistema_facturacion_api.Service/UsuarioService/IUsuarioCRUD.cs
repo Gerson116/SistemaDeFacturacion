@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using sistema_facturacion_api.Data;
 using sistema_facturacion_api.Data.DTOs;
 using sistema_facturacion_api.Useful;
+using sistema_facturacion_api.Useful.Filtros;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace sistema_facturacion_api.Service.UsuarioService
         Task<OperationResultRequest> EditarUsuario(TblUsuariosDTO usuario);
         Task<OperationResultRequest> CambiarEstadoUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch);
         Task<TblUsuariosDTO> GetUsuarioPorEmail(string email);
+        Task<OperationResultRequest> BuscarUsuarios(FiltroUsuario parametros);
     }
 }

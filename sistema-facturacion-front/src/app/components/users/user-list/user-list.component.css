@@ -10,3 +10,7 @@
 .titleButton{
   color: #fff;
 }
+
+.mensajeError{
+  color: rgb(250, 81, 81);
+}

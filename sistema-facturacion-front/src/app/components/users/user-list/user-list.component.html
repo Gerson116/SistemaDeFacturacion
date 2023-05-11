@@ -2,55 +2,133 @@
 
 <app-dashboard></app-dashboard>
 
+
+
+<!-- Modal Add User -->
+<div class="modal fade" id="userMaintenance" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="userMaintenanceLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="userMaintenanceLabel">{{maintenanceTitle}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formGroupUserRegister">
+          <div class="row mt-2">
+            <div class="col-md-6">
+              <label for="lastname">Apellido(s): <span class="mensajeError" *ngIf="formGroupUserRegister.controls['apellido'].invalid">*Campo requerido</span></label>
+              <input type="text" name="lastname" class="form-control" formControlName="apellido">
+            </div>
+            <div class="col-md-6">
+              <label for="name">Nombre(s): <span class="mensajeError" *ngIf="formGroupUserRegister.controls['nombre'].invalid">*Campo requerido</span></label>
+              <input type="text" name="name" class="form-control" formControlName="nombre">
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-6">
+              <label for="userName">Nombre de Usuario: <span class="mensajeError" *ngIf="formGroupUserRegister.controls['nombreDeUsuario'].invalid">*Campo requerido</span></label>
+              <input type="text" name="userName" class="form-control" formControlName="nombreDeUsuario">
+            </div>
+            <div class="col-md-6">
+              <label for="birthdate">Fecha de Nacimiento: <span class="mensajeError" *ngIf="formGroupUserRegister.controls['fechaDeNacimiento'].invalid">*Campo requerido</span></label>
+              <input type="date" name="birthdate" class="form-control" formControlName="fechaDeNacimiento">
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-6">
+              <label for="identificacion">Seleccione el documento</label><span class="mensajeError" *ngIf="formGroupUserRegister.controls['selectDocuments'].invalid">*Campo requerido</span>
+              <div class="input-group mb-3">
+                <select class="form-select"
+                        aria-label="Default select example"
+                        formControlName="selectDocuments"
+                        name="identificacion">
+                  <option *ngFor="let item of selectDocuments"
+                          [value]="item.value">{{ item.viewValue }}</option>
+                </select>
+                <input type="text" name="id" class="form-control" formControlName="identificacion">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="email">Email: <span class="mensajeError" *ngIf="formGroupUserRegister.controls['email'].invalid">*Campo requerido</span></label>
+              <input type="text" name="email" class="form-control" formControlName="email">
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-6">
+              <span class="mensajeError" *ngIf="formGroupUserRegister.controls['rolUsuario'].invalid">*Campo requerido</span>
+              <select class="form-select"
+                      aria-label="Default select example"
+                      formControlName="rolUsuario"
+                      name="rol">
+                <option *ngFor="let item of userRols"
+                        [value]="item.value">{{ item.viewValue }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="password">Contraseña: <span class="mensajeError" *ngIf="formGroupUserRegister.controls['password'].invalid">*Campo requerido</span></label>
+              <input type="password" name="password" class="form-control" formControlName="password">
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-6">
+              <div class="form-check form-switch">
+                <input type="checkbox" name="state" class="form-check-input" formControlName="estado">
+                <label for="state">Estado: <span class="mensajeError" *ngIf="formGroupUserRegister.controls['estado'].invalid">*Campo requerido</span></label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-success" (click)="btnSaveUser()">
+          <i class="fa-solid fa-floppy-disk"></i> Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row mt-2">
   <h3 class="title">Mantenimiento Usuarios</h3>
 </div>
 
 <div class="row">
   <div class="col-md-8">
-    <button class="btn btn-info titleButton">Agregar Usuario <i class="fa-solid fa-plus"></i></button>
+    <button class="btn btn-info titleButton"
+            data-bs-toggle="modal"
+            data-bs-target="#userMaintenance"
+            (click)="addUser()">
+      <i class="fa-solid fa-plus"></i> Agregar Usuario
+    </button>
   </div>
   <div class="col-md-4 justify-content-end">
-    <div class="input-group mb-3">
+    <form class="input-group mb-3" [formGroup]="formGroupFilter">
       <!-- Seleccion -->
-      <select class="form-select" aria-label="Default select example">
-        <option selected>Seleccionar</option>
-        <option value="1">Nombre</option>
-        <option value="2">Identificación (Cédula)</option>
-        <option value="3">Pasaporte</option>
+      <select class="form-select"
+              aria-label="Default select example"
+              formControlName="selectFilter">
+        <option *ngFor="let item of multipleChoices"
+                [value]="item.value">{{ item.viewValue }}</option>
       </select>
       <!-- textbox -->
-      <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <input type="text"
+             class="form-control"
+             placeholder="Buscar..."
+             aria-label="Buscar..."
+             aria-describedby="button-addon2"
+             formControlName="txtSearch">
 
       <!-- Boton buscar -->
-      <button class="btn btn-info titleButton">
+      <button class="btn btn-info titleButton" (click)="filterUser()">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
-    </div>
+    </form>
   </div>
 </div>
 
 <div class="row ventanaCompleta">
   <div class="col-md-12">
-    <!-- <dx-data-grid
-      id="gridContainer"
-      [dataSource]="dataSource"
-      [showBorders]="true"
-      [remoteOperations]="true"
-    >
-      <dxi-column dataField="OrderNumber" dataType="number"> </dxi-column>
-      <dxi-column dataField="OrderDate" dataType="date"> </dxi-column>
-      <dxi-column dataField="StoreCity" dataType="string"> </dxi-column>
-      <dxi-column dataField="StoreState" dataType="string"> </dxi-column>
-      <dxi-column dataField="Employee" dataType="string"> </dxi-column>
-      <dxi-column dataField="SaleAmount" dataType="number" format="currency">
-      </dxi-column>
-      <dxo-paging [pageSize]="12"></dxo-paging>
-      <dxo-pager
-        [showPageSizeSelector]="true"
-        [allowedPageSizes]="[8, 12, 20]"
-      ></dxo-pager>
-    </dx-data-grid> -->
     <table class="table table-striped">
       <thead>
         <tr>
@@ -64,173 +142,22 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
+        <tr *ngFor="let item of dataSource">
+          <td>{{item.id}}</td>
+          <td>{{item.apellidos}}</td>
+          <td>{{item.nombres}}</td>
+          <td>{{item.nombreDeUsuario}}</td>
+          <td>{{item.tarjetaDeIdentificacion}}</td>
+          <td>{{item.pasaporte}}</td>
           <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
+            <button class="btn btn-success btnAccion"
+                    data-bs-toggle="modal"
+                    data-bs-target="#userMaintenance"
+                    (click)="editUser(item)">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
-            <button class="btn btn-danger btnAccion">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn btn-danger btnAccion">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn btn-danger btnAccion">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn btn-danger btnAccion">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn btn-danger btnAccion">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn btn-danger btnAccion">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn btn-danger btnAccion">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn btn-danger btnAccion">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>Lorem, ipsum dolor.</td>
-          <td>
-            <button class="btn btn-info">
-              <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button class="btn btn-success btnAccion">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn btn-danger btnAccion">
+            <button class="btn btn-danger btnAccion"
+                    (click)="btnDeleteUser(item)">
               <i class="fa-solid fa-trash"></i>
             </button>
           </td>
@@ -239,18 +166,25 @@
     </table>
     <!-- Paginacion -->
     <nav aria-label="Page navigation example" class="">
-      <ul class="pagination justify-content-center">
+      <ul class="pagination justify-content-end">
         <li class="page-item">
           <a class="page-link" href="#" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <button class="btn ">
+            <i class="fa-solid fa-angle-right"></i>
+          </button>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">
+            <i class="fa-solid fa-angle-right"></i>
+          </a>
+        </li>
         <li class="page-item">
           <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
+            <i class="fa-solid fa-angles-right"></i>
           </a>
         </li>
       </ul>

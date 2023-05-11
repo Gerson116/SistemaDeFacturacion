@@ -6,6 +6,7 @@ using sistema_facturacion_api.Data;
 using sistema_facturacion_api.Data.DTOs;
 using sistema_facturacion_api.Data.Enums;
 using sistema_facturacion_api.Useful;
+using sistema_facturacion_api.Useful.Filtros;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,6 +133,7 @@ namespace sistema_facturacion_api.Service.UsuarioService
                 List<TblUsuarios> listadoUsuarios = new List<TblUsuarios>();
                 IQueryable<TblUsuarios> query = _dbContext.Usuario.AsQueryable();
                 listadoUsuarios = await query
+                    .Where(x => x.EstadoId == (int)EnumEstadoUsuario.Activo)
                     .Skip((page - 1) * cantidadDeElemento)
                     .Take(cantidadDeElemento)
                     .ToListAsync();
@@ -188,9 +190,23 @@ namespace sistema_facturacion_api.Service.UsuarioService
                         //... Primer paso: se valida si existe el documento de identidad.
                         validarDocumentoDeIdentidad = await _dbContext.Usuario.AnyAsync(u => u.TarjetaDeIdentificacion.Contains(documentoDeIdentidad));
 
-                        //... Segundo paso: se valida si existe algun email
+                        //... Segundo paso: Se valida si existe el pasaporte
+                        validarPasaporte = await _dbContext.Usuario.AnyAsync(u => u.Pasaporte.Contains(pasaporte));
+
+                        //... Tercer paso: se valida si existe algun email
                         validarExistenciaDelEmail = await _dbContext.Usuario.AnyAsync(x => x.Email.Contains(email));
-                        resp = (validarDocumentoDeIdentidad == validarExistenciaDelEmail) ? false : true;
+                        if (validarDocumentoDeIdentidad)
+                        {
+                            resp = true;
+                        }
+                        else if (validarExistenciaDelEmail)
+                        {
+                            resp = true;
+                        }
+                        else
+                        {
+                            resp = false;
+                        }
                         scope.Complete();
                     }
                     return resp;
@@ -230,6 +246,79 @@ namespace sistema_facturacion_api.Service.UsuarioService
                 objUsuario = null;
             }
             return objUsuario;
+        }
+
+        public async Task<OperationResultRequest> BuscarUsuarios(FiltroUsuario parametros)
+        {
+            _operationResult = new OperationResultRequest();
+            try
+            {
+                int page = 1;
+                int cantidadDeElemento = 10;
+
+                if (parametros.Id > 0 && parametros.Id != null)
+                {
+                    IQueryable<TblUsuarios> query = _dbContext.Usuario.Where(x => x.Id == parametros.Id).AsQueryable();
+                    List<TblUsuarios> listadoUsuarios = new List<TblUsuarios>();
+                    listadoUsuarios = await query
+                                                .Skip((page - 1) * cantidadDeElemento)
+                                                .Take(cantidadDeElemento)
+                                                .ToListAsync();
+                    _operationResult.Succcess = true;
+                    _operationResult.Data = listadoUsuarios;
+                    _operationResult.Message = _mesajeExitoso;
+                    _operationResult.Paginacion = new Pager(page, cantidadDeElemento, listadoUsuarios.Count());
+                }
+
+                if (parametros.Nombre != string.Empty && parametros.Nombre != "" && parametros.Nombre != null)
+                {
+                    IQueryable<TblUsuarios> query = _dbContext.Usuario.Where(x => x.Nombres.Contains(parametros.Nombre)).AsQueryable();
+                    List<TblUsuarios> listadoUsuarios = new List<TblUsuarios>();
+                    listadoUsuarios = await query
+                                                .Skip((page - 1) * cantidadDeElemento)
+                                                .Take(cantidadDeElemento)
+                                                .ToListAsync();
+                    _operationResult.Succcess = true;
+                    _operationResult.Data = listadoUsuarios;
+                    _operationResult.Message = _mesajeExitoso;
+                    _operationResult.Paginacion = new Pager(page, cantidadDeElemento, listadoUsuarios.Count());
+                }
+
+                if (parametros.Identificacion != string.Empty && parametros.Identificacion != "" && parametros.Identificacion != null)
+                {
+                    IQueryable<TblUsuarios> query = _dbContext.Usuario.Where(x => x.TarjetaDeIdentificacion.Contains(parametros.Identificacion)).AsQueryable();
+                    List<TblUsuarios> listadoUsuarios = new List<TblUsuarios>();
+                    listadoUsuarios = await query
+                                                .Skip((page - 1) * cantidadDeElemento)
+                                                .Take(cantidadDeElemento)
+                                                .ToListAsync();
+                    _operationResult.Succcess = true;
+                    _operationResult.Data = listadoUsuarios;
+                    _operationResult.Message = _mesajeExitoso;
+                    _operationResult.Paginacion = new Pager(page, cantidadDeElemento, listadoUsuarios.Count());
+                }
+
+                if (parametros.Pasaporte != string.Empty && parametros.Pasaporte != "" && parametros.Pasaporte != null)
+                {
+                    IQueryable<TblUsuarios> query = _dbContext.Usuario.Where(x => x.Pasaporte.Contains(parametros.Pasaporte)).AsQueryable();
+                    List<TblUsuarios> listadoUsuarios = new List<TblUsuarios>();
+                    listadoUsuarios = await query
+                                                .Skip((page - 1) * cantidadDeElemento)
+                                                .Take(cantidadDeElemento)
+                                                .ToListAsync();
+                    _operationResult.Succcess = true;
+                    _operationResult.Data = listadoUsuarios;
+                    _operationResult.Message = _mesajeExitoso;
+                    _operationResult.Paginacion = new Pager(page, cantidadDeElemento, listadoUsuarios.Count());
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _operationResult.Succcess = false;
+                _operationResult.Message = ex.Message;
+            }
+            return _operationResult;
         }
     }
 }
