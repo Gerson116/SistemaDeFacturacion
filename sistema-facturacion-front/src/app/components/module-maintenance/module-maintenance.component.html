@@ -1,0 +1,52 @@
+
+
+<app-dashboard></app-dashboard>
+
+<div class="col-md-8 content">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="title">{{title}}</h3>
+    </div>
+    <div class="col-md-12">
+      <form [formGroup]="formGroupModuleMaintenance" class="row">
+        <div class="col-md-3">
+          <label for="nombreDelModulo">Nombre del Modulo</label>
+          <input type="text" name="nombreDelModulo" class="form-control" formControlName="nombreDelModulo">
+        </div>
+        <div class="col-md-3">
+          <label for="rutaDelModulo">Ruta</label>
+          <input type="text" name="rutaDelModulo" class="form-control" formControlName="rutaDelModulo">
+        </div>
+        <div class="col-md-3 align-self-center">
+          <button class="btn btn-primary" (click)="btnAddModule()">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-12">
+      <!-- Tabla con elementos existentes -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Ruta</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataSources">
+            <td>{{item.nombre}}</td>
+            <td>{{item.ruta}}</td>
+            <td>
+              <button class="btn btn-danger" (click)="btnDeleteElement(item.id)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

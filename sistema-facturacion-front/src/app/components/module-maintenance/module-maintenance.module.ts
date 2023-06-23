@@ -1,22 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxRadioGroupModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-angular';
-import { DashboardModule } from '../../dashboard/dashboard.module';
 import { HttpClientModule } from '@angular/common/http';
-import { PermissionListRoutingModule } from './permission-list.routing.module';
-import { PermissionListComponent } from './permission-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UsersService } from 'src/app/services/users/users.service';
-import { PermisoService } from 'src/app/services/permisos/permiso.service';
+import { ModuleMaintenanceComponent } from './module-maintenance.component';
+import { ModuleMaintenanceRoutingModule } from './module-maintenance.routing.module';
+import { DashboardModule } from '../dashboard/dashboard.module';
 import { ModuloService } from 'src/app/services/modulo/modulo.service';
 
 @NgModule({
   declarations: [
-    PermissionListComponent
+    ModuleMaintenanceComponent
   ],
   imports: [
     CommonModule,
-    PermissionListRoutingModule,
+    ModuleMaintenanceRoutingModule,
     DashboardModule,
     DxSelectBoxModule,
     DxTextBoxModule,
@@ -29,7 +28,7 @@ import { ModuloService } from 'src/app/services/modulo/modulo.service';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  exports: [PermissionListComponent],
-  providers: [UsersService, PermisoService, ModuloService]
+  exports: [ModuleMaintenanceComponent],
+  providers: [ModuloService]
 })
-export class PermissionListModule { }
+export class ModuleMaintenanceModule { }

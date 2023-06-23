@@ -51,6 +51,66 @@ namespace sistema_facturacion_api.Service.PermisosServices
             return _request;
         }
 
+        public async Task<OperationResultRequest> EditarYAgregarPermisosExistentes(List<TblPermisoDTO> permisosUsuarios)
+        {
+            TblPermiso objPermiso = new TblPermiso();
+            List<TblPermiso> listPermisos = new List<TblPermiso>();
+            listPermisos = _mapper.Map<List<TblPermiso>>(permisosUsuarios);
+            TblUsuarios objUsuario = new TblUsuarios();
+
+            try
+            {
+                var element = listPermisos.FirstOrDefault();
+                var permisosExistentes = await _dbContext.Permiso
+                                                         .Where(x => x.UsuarioId == element.UsuarioId)
+                                                         .ToListAsync();
+                var usuario = await _dbContext.Usuario.FindAsync(element.UsuarioId);
+                if (permisosExistentes.Count > 0)
+                {
+                    //... En caso de ingresar aqui, se editara los datos y 
+                    foreach (var item in listPermisos)
+                    {
+                        var datosExistente = permisosExistentes.Where(x => x.ModuloId == item.ModuloId).FirstOrDefault();
+                        if (datosExistente != null)
+                        {
+                            datosExistente.UsuarioId = item.UsuarioId;
+                            datosExistente.ModuloId = item.ModuloId;
+                            datosExistente.RolId = usuario.RolId;
+                            datosExistente.C = item.C;
+                            datosExistente.R = item.R;
+                            datosExistente.U = item.U;
+                            datosExistente.D = item.D;
+
+                            _dbContext.Permiso.Entry(datosExistente).State = EntityState.Modified;
+                            await _dbContext.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            item.FechaDeCreacion = DateTime.Now;
+                            item.Estado = true;
+                            _dbContext.Permiso.Add(item);
+                            _dbContext.SaveChanges();
+                        }
+                    }
+                }
+                else
+                {
+                    listPermisos.ForEach(x => x.Estado = true);
+                    await _dbContext.Permiso.AddRangeAsync(listPermisos);
+                    await _dbContext.SaveChangesAsync();
+                }
+                _request.Succcess = true;
+                _request.Message = "Exito";
+                _request.Data = permisosUsuarios;
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = $"Ocurrio un error ${ex.Message}";
+            }
+            return _request;
+        }
+
         public async Task<OperationResultRequest> GetAllPermisos(int usuarioId)
         {
             try
@@ -88,7 +148,7 @@ namespace sistema_facturacion_api.Service.PermisosServices
                 await _dbContext.SaveChangesAsync();
 
                 _request.Succcess = true;
-                _request.Message = "Exito";
+                _request.Message = "Los datos fueron almacenados con exito.";
                 _request.Data = _listadoPermisos;
             }
             catch (Exception ex)

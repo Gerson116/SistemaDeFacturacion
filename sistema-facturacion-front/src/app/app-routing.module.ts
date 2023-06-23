@@ -1,14 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { AuthGuard } from './security/guards/auth-guard';
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./components/login/login.module').then(m => m.LoginModule)
-  },
-  {
-    path: 'login',
     loadChildren: () => import('./components/login/login.module').then(m => m.LoginModule)
   },
   {
@@ -21,31 +18,38 @@ const routes: Routes = [
   },
   {
     path: 'listado-usuario',
-    loadChildren: () => import('./components/users/user-list/user-list.module').then(m => m.UserListModule)
+    loadChildren: () => import('./components/users/user-list/user-list.module').then(m => m.UserListModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'dashboard',
-    loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule)
+    loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'perfil',
-    loadChildren: () => import('./components/users/perfil/perfil.module').then(m => m.PerfilModule)
+    loadChildren: () => import('./components/users/perfil/perfil.module').then(m => m.PerfilModule),
+    canActivate: [AuthGuard]
   },
   {
-    path: 'listado-roles',
-    loadChildren: () => import('./components/role/role-list/role-list.module').then(m => m.RoleListModule)
-  },
-  {
-    path: 'listado-permisos',
-    loadChildren: () => import('./components/permission/permission-list/permission-list.module').then(m => m.PermissionListModule)
+    path: 'permisos',
+    loadChildren: () => import('./components/permission/permission-list/permission-list.module').then(m => m.PermissionListModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'listado-ventas',
-    loadChildren: () => import('./components/sales/sales-list/sales-list.module').then(m => m.SalesListModule)
+    loadChildren: () => import('./components/sales/sales-list/sales-list.module').then(m => m.SalesListModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'nueva-venta',
-    loadChildren: () => import('./components/sales/add-sales/add-sales.module').then(m => m.AddSalesModule)
+    loadChildren: () => import('./components/sales/add-sales/add-sales.module').then(m => m.AddSalesModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'mantenimiento-modulo',
+    loadChildren: () => import('./components/module-maintenance/module-maintenance.module').then(m => m.ModuleMaintenanceModule),
+    canActivate: [AuthGuard]
   }
 ];
 

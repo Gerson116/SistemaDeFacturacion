@@ -22,5 +22,6 @@ namespace sistema_facturacion_api.Service.UsuarioService
         Task<OperationResultRequest> CambiarEstadoUsuario(int usuarioId, JsonPatchDocument<TblUsuarios> usuariosPatch);
         Task<TblUsuariosDTO> GetUsuarioPorEmail(string email);
         Task<OperationResultRequest> BuscarUsuarios(FiltroUsuario parametros);
+        Task<OperationResultRequest> BuscarUsuariosPorCedula(string cedula);
     }
 }

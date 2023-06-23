@@ -8,24 +8,33 @@ export class SweetalertService {
 
   constructor() { }
 
-  successMessage(title: string, message: string){
+  successMessage(message: string){
     Swal.fire({
       icon: 'success',
-      title: title,
+      title: "Exito",
       text: message
     });
   }
-  infoMessage(title: string, message: string){
+  successMessageRight(title: string){
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: title,
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
+  infoMessage(message: string){
     Swal.fire({
       icon: 'warning',
-      title: title,
+      title: "Advertencia",
       text: message
     });
   }
-  dangerMessage(title: string, message: string){
+  dangerMessage(message: string){
     Swal.fire({
       icon: 'error',
-      title: title,
+      title: "Ocurrio un error",
       text: message
     });
   }

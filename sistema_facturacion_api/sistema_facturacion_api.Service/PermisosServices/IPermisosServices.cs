@@ -13,6 +13,7 @@ namespace sistema_facturacion_api.Service.PermisosServices
         Task<OperationResultRequest> GetAllPermisos(int usuarioId);
         Task<OperationResultRequest> PostAgregarPermisos(List<TblPermisoDTO> nuevoPermiso);
         Task<OperationResultRequest> PutEditarPermisos(TblPermisoDTO editarPermiso, int permisoId);
+        Task<OperationResultRequest> EditarYAgregarPermisosExistentes(List<TblPermisoDTO> permisosUsuarios);
         Task<OperationResultRequest> DeletePermisos(int usuarioId, int permisoId);
     }
 }

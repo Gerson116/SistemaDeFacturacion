@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
         private OperationResultRequest _request;
         private OperationResultLogin _requestLogin;
         private TblUsuarios _usuarios;
+        private TblModulo _modulo;
         private List<TblPermiso> _permiso;
         private DetalleDeSesion _detalleDeSesion;
         private string _jwtkey = "jwtkey";
@@ -43,6 +45,7 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
             _detalleDeSesion = new DetalleDeSesion();
             _encrypt = new Encrypt();
             _mapper = mapper;
+            _modulo = new TblModulo();
             _usuarioServices = usuarioServices;
         }
         public async Task<TokenUsuario> ConstruirToken(string email, string nombreDeUsuario)
@@ -81,23 +84,29 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
                 _usuarios = await _dbContext.Usuario
                     .Where(u => u.Email == iniciarSesion.Email && u.Password == pass)
                     .FirstAsync();
+                UsuarioSesionDTO temp = new UsuarioSesionDTO();
+                temp = _mapper.Map<UsuarioSesionDTO>(_usuarios);
+
                 TokenUsuario token = new TokenUsuario();
                 if (_usuarios != null)
                 {
                     using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
                         //... Paso 1: se buscan los datos de los usuarios.
-                        _detalleDeSesion.Usuarios = _usuarios;
-
+                        _detalleDeSesion.Usuarios = temp;
+                        _detalleDeSesion.RolId = _usuarios.RolId;
                         //... Paso 2: se buscan los permisos.
                         _detalleDeSesion.Permisos = await _dbContext.Permiso.Where(x => x.UsuarioId == _usuarios.Id).ToListAsync();
+                        _detalleDeSesion.Modulos = await BuscarModulos(_detalleDeSesion.Permisos);
 
                         _requestLogin.Succcess = true;
-                        _requestLogin.Message = "Exito";
+                        _requestLogin.Message = $"Bienvenido {_usuarios.Nombres} {_usuarios.Apellidos}";
                         _requestLogin.Data = _detalleDeSesion;
                         token = await ConstruirToken(iniciarSesion.Email, _usuarios.NombreDeUsuario);
                         _requestLogin.Token = token.Token;
-                        _requestLogin.FechaExpiracion = token.FechaExpiracion;
+                        _requestLogin.FechaExpiracion = token.FechaExpiracion.AddHours(8);
+
+                        scope.Complete();
                     }
                 }
                 else
@@ -186,6 +195,31 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
                 resp = false;
             }
             return resp;
+        }
+
+        private async Task<List<TblModuloDTO>> BuscarModulos(List<TblPermiso> permisos) 
+        {
+            TblModuloDTO tempModulo = new TblModuloDTO();
+            List<TblModuloDTO> listadoDeModulos = new List<TblModuloDTO>();
+
+            try
+            {
+                IQueryable<TblModulo> query = _dbContext.Modulo.AsQueryable();
+
+                foreach (var item in permisos)
+                {
+                    _modulo = await query.Where(x => x.Id == item.ModuloId).FirstAsync();
+                    tempModulo = _mapper.Map<TblModuloDTO>(_modulo);
+                    listadoDeModulos.Add(tempModulo);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                listadoDeModulos = null;
+            }
+            return listadoDeModulos;
         }
     }
 }

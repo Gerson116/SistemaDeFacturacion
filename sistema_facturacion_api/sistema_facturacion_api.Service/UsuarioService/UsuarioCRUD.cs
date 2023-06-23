@@ -320,5 +320,28 @@ namespace sistema_facturacion_api.Service.UsuarioService
             }
             return _operationResult;
         }
+
+        public async Task<OperationResultRequest> BuscarUsuariosPorCedula(string cedula)
+        {
+            _operationResult = new OperationResultRequest();
+            try
+            {
+                if (cedula != string.Empty && cedula != "" && cedula != null)
+                {
+                    TblUsuarios usuarios = new TblUsuarios();
+                    usuarios = await _dbContext.Usuario.Where(x => x.TarjetaDeIdentificacion == cedula).FirstAsync();
+
+                    _operationResult.Succcess = true;
+                    _operationResult.Data = usuarios;
+                    _operationResult.Message = "Exito";
+                }
+            }
+            catch (Exception ex)
+            {
+                _operationResult.Succcess = false;
+                _operationResult.Message = ex.Message;
+            }
+            return _operationResult;
+        }
     }
 }

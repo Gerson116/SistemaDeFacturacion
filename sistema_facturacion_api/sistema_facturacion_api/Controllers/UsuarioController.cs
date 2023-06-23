@@ -12,7 +12,7 @@ namespace sistema_facturacion_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize("policy")]
+    [Authorize("policy")]
     public class UsuarioController : ControllerBase
     {
         private IUsuarioCRUD _usuarioCRUD;
@@ -55,6 +55,14 @@ namespace sistema_facturacion_api.Controllers
         {
             _operationResultRequest = new OperationResultRequest();
             _operationResultRequest = await _usuarioCRUD.BuscarUsuarios(parametros);
+            return _operationResultRequest;
+        }
+
+        [HttpGet("BuscarUsuariosPorCedula/{cedula}")]
+        public async Task<ActionResult<OperationResultRequest>> BuscarUsuariosPorCedula(string cedula)
+        {
+            _operationResultRequest = new OperationResultRequest();
+            _operationResultRequest = await _usuarioCRUD.BuscarUsuariosPorCedula(cedula);
             return _operationResultRequest;
         }
 

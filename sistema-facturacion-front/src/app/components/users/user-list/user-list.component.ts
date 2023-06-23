@@ -182,27 +182,27 @@ export class UserListComponent {
       if(this.maintenanceState == false){
         this.usersService.saveUser(this.tblUsuarios).subscribe(resp => {
           if(resp.succcess){
-            this.sweetalertService.successMessage("Exito", resp.message);
+            this.sweetalertService.successMessage(resp.message);
             this.searchUser();
           }else{
-            this.sweetalertService.dangerMessage("Ocurrio un Error", resp.data);
+            this.sweetalertService.dangerMessage(resp.data);
           }
         });
       }
       else{
         this.usersService.editUser(this.tblUsuarios).subscribe(resp => {
-          this.sweetalertService.successMessage("Exito", resp.message);
+          this.sweetalertService.successMessage(resp.message);
           this.searchUser();
         });
       }
     }else{
-      this.sweetalertService.dangerMessage("Ocurrio un error", "Necesita completar los campos requeridos.");
+      this.sweetalertService.dangerMessage("Necesita completar los campos requeridos.");
     }
   }
 
   btnDeleteUser(user: TblUsuarios){
     this.usersService.changeUserState(user.id, UserState.Inactivo).subscribe(resp => {
-      this.sweetalertService.successMessage("Exito", resp.message);
+      this.sweetalertService.successMessage(resp.message);
       this.searchUser();
     });
   }

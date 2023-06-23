@@ -23,6 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(conf =>
 {
     conf.CreateMap<TblUsuarios, TblUsuariosDTO>().ReverseMap();
+    conf.CreateMap<TblUsuarios, UsuarioSesionDTO>().ReverseMap();
     conf.CreateMap<TblProducto, TblProductosDTO>().ReverseMap();
     conf.CreateMap<TblMarca, TblMarcaDTO>().ReverseMap();
     conf.CreateMap<TblEmpresas, TblEmpresasDTO>().ReverseMap();

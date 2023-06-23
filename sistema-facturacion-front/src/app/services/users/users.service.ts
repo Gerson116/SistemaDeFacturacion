@@ -15,12 +15,20 @@ export class UsersService {
 
   constructor(private http: HttpClient) { }
 
+  getUserId(usuarioId: number): Observable<OperationResultRequest>{
+    return this.http.get<OperationResultRequest>(`${this.baseUrl}PerfilUsuario/${usuarioId}`);
+  }
+
   userList(pagina: number = 1, cantidadDePagina: number = 10): Observable<OperationResultRequest>{
     return this.http.get<OperationResultRequest>(`${this.baseUrl}ListadoDeUsuarios/${pagina}/${cantidadDePagina}`);
   }
 
   filterUser(item: ParametrosDeBusqueda): Observable<OperationResultRequest>{
     return this.http.post<OperationResultRequest>(`${this.baseUrl}BuscarUsuarios`, item);
+  }
+
+  filterUserPerId(cedula: string): Observable<OperationResultRequest>{
+    return this.http.get<OperationResultRequest>(`${this.baseUrl}BuscarUsuariosPorCedula/${cedula}`);
   }
 
   saveUser(item: TblUsuarios): Observable<OperationResultRequest>{

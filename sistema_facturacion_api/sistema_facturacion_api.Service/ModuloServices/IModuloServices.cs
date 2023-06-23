@@ -12,7 +12,7 @@ namespace sistema_facturacion_api.Service.ModuloServices
     public interface IModuloServices
     {
         Task<OperationResultRequest> GetAllModulos();
-        Task<OperationResultRequest> PostNuevoModulo(List<TblModuloDTO> nuevoModulo);
+        Task<OperationResultRequest> PostNuevoModulo(TblModuloDTO nuevoModulo);
         Task<OperationResultRequest> PutEditarModulo(TblModuloDTO editarModulo, int moduloId);
         Task<OperationResultRequest> DeleteEliminarModulo(int moduloId);
     }
