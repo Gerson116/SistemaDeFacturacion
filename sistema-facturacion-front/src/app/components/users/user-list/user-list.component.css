@@ -1,0 +1,16 @@
+
+.ventanaCompleta{
+  height: 100vh;
+}
+
+.btnAccion{
+  margin-left: 5px;
+}
+
+.titleButton{
+  color: #fff;
+}
+
+.mensajeError{
+  color: rgb(250, 81, 81);
+}

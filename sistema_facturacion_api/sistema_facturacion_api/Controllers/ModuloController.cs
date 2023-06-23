@@ -33,8 +33,19 @@ namespace sistema_facturacion_api.Controllers
             return _result;
         }
 
+        //[HttpGet("")]
+        //public async Task<ActionResult<OperationResultRequest>> GetAllModulos()
+        //{
+        //    _result = await _moduloServices.GetAllModulos();
+        //    if (_result.Succcess)
+        //    {
+        //        return _result;
+        //    }
+        //    return _result;
+        //}
+
         [HttpPost("PostNuevoModulo")]
-        public async Task<ActionResult<OperationResultRequest>> PostNuevoModulo([FromBody] List<TblModuloDTO> nuevoModulo)
+        public async Task<ActionResult<OperationResultRequest>> PostNuevoModulo([FromBody] TblModuloDTO nuevoModulo)
         {
             _result = await _moduloServices.PostNuevoModulo(nuevoModulo);
             if (_result.Succcess)

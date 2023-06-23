@@ -60,7 +60,7 @@ namespace sistema_facturacion_api.Service.ModuloServices
             {
                 List<TblModulo> modulos = new List<TblModulo>();
                 IQueryable<TblModulo> query = _dbcontext.Modulo.AsQueryable();
-                modulos = await query.ToListAsync();
+                modulos = await query.Where(x => x.Estado == true).ToListAsync();
 
                 List<TblModuloDTO> moduloDTO = new List<TblModuloDTO>();
                 moduloDTO = _mapper.Map<List<TblModuloDTO>>(modulos);
@@ -77,18 +77,19 @@ namespace sistema_facturacion_api.Service.ModuloServices
             return _result;
         }
 
-        public async Task<OperationResultRequest> PostNuevoModulo(List<TblModuloDTO> nuevoModulo)
+        public async Task<OperationResultRequest> PostNuevoModulo(TblModuloDTO nuevoModulo)
         {
             try
             {
                 if (nuevoModulo != null)
                 {
                     List<TblModulo> modulos = new List<TblModulo>();
-                    modulos = _mapper.Map<List<TblModulo>>(nuevoModulo);
-                    modulos.ForEach(x => x.Estado = true);
-                    modulos.ForEach(x => x.FechaDeCreacion = DateTime.Now);
+                    _modulo = new TblModulo();
+                    _modulo = _mapper.Map<TblModulo>(nuevoModulo);
+                    _modulo.Estado = true;
+                    _modulo.FechaDeCreacion = DateTime.Now;
 
-                    await _dbcontext.Modulo.AddRangeAsync(modulos);
+                    await _dbcontext.Modulo.AddAsync(_modulo);
                     await _dbcontext.SaveChangesAsync();
 
                     _result.Succcess = true;

@@ -23,6 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(conf =>
 {
     conf.CreateMap<TblUsuarios, TblUsuariosDTO>().ReverseMap();
+    conf.CreateMap<TblUsuarios, UsuarioSesionDTO>().ReverseMap();
     conf.CreateMap<TblProducto, TblProductosDTO>().ReverseMap();
     conf.CreateMap<TblMarca, TblMarcaDTO>().ReverseMap();
     conf.CreateMap<TblEmpresas, TblEmpresasDTO>().ReverseMap();
@@ -56,10 +57,20 @@ builder.Services.AddTransient<IPermisosServices, SPermisosServices>();
 
 string connectionStringDesarrollo = System.Environment.GetEnvironmentVariable("DbFacturaDesarrollo");
 string jwtkey = System.Environment.GetEnvironmentVariable("jwtkey");
+string _myPolice = "_myPolice";
+
 builder.Services.AddDbContext<FacturacionDbContext>(conf =>
 {
     //conf.UseSqlServer(builder.Configuration.GetConnectionString(connectionStringDesarrollo));
     conf.UseSqlServer(connectionStringDesarrollo);
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(_myPolice, builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
 });
 
 builder.Services.AddAuthentication(options => 
@@ -104,6 +115,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(_myPolice);
 
 app.MapControllers();
 

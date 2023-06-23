@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DxDrawerModule, DxListModule, DxTabPanelModule, DxTemplateModule, DxTreeViewModule } from 'devextreme-angular';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard.routing.module';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -17,7 +18,8 @@ import { DashboardRoutingModule } from './dashboard.routing.module';
     DxTemplateModule,
     DxDrawerModule,
     DxListModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    RouterModule
   ],
   bootstrap: [DashboardComponent],
   exports:[DashboardComponent]
