@@ -48,6 +48,7 @@ export class LoginComponent{
         localStorage.setItem(environment.fechaExpiracion, resp.fechaExpiracion.toString());
         localStorage.setItem(environment.permisos, JSON.stringify(resp.data.permisos));
         localStorage.setItem(environment.modulos, JSON.stringify(resp.data.modulos));
+        localStorage.setItem(environment.empresaId, resp.data.empresaId);
         this.router.navigateByUrl('perfil');
       }
       else{

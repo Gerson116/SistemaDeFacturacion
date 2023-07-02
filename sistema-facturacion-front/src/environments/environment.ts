@@ -7,5 +7,6 @@ export const environment = {
   rolId: "rolId",
   fechaExpiracion: "fechaExpiracion",
   permisos: "permisos",
-  modulos: "modulos"
+  modulos: "modulos",
+  empresaId: "EmpresaId"
 };
