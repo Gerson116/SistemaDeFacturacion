@@ -34,6 +34,38 @@ namespace sistema_facturacion_api.Controllers
             return _result;
         }
 
+        [HttpGet("GetFactura/{facturaId}")]
+        public async Task<ActionResult<OperationResultRequest>> GetFactura(int facturaId)
+        {
+            _result = await _facturaServices.GetFactura(facturaId);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
+        [HttpGet("BuscarFactura/{facturaId}")]
+        public async Task<ActionResult<OperationResultRequest>> BuscarFactura(int facturaId)
+        {
+            _result = await _facturaServices.BuscarFactura(facturaId);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
+
+        [HttpGet("GetCabeceraFactura/{facturaId}")]
+        public async Task<ActionResult<OperationResultRequest>> GetCabeceraFactura(int facturaId)
+        {
+            _result = await _facturaServices.GetCabeceraFactura(facturaId);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
+
         [HttpGet("GetDetalleFactura/{facturaId}")]
         public async Task<ActionResult<OperationResultRequest>> GetDetalleFactura(int facturaId)
         {

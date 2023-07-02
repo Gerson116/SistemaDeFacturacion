@@ -71,12 +71,40 @@ namespace sistema_facturacion_api.Service.FacturaServices
             try
             {
                 List<TblFacturas> factura = new List<TblFacturas>();
-                IQueryable<TblFacturas> query = _dbContext.Factura.Where(x => x.EmpresaId == empresaId).AsQueryable();
+                IQueryable<TblFacturas> query = _dbContext.Factura
+                    .Where(x => x.EmpresaId == empresaId && x.EstadoFacturaId == (int)EnumEstadoFacturas.Activo)
+                    .AsQueryable();
                 factura = await query.ToListAsync();
                 _listFacturaDTO = _mapper.Map<List<TblFacturasDTO>>(factura);
                 _request.Succcess = true;
                 _request.Message = "Exito";
                 _request.Data = _listFacturaDTO;
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = $"Ocurrio un error: {ex.Message}";
+            }
+            return _request;
+        }
+
+        public async Task<OperationResultRequest> GetCabeceraFactura(int facturaId)
+        {
+            try
+            {
+                _factura = await _dbContext.Factura.Where(x => x.Id == facturaId).FirstOrDefaultAsync();
+
+                if (_factura != null)
+                {
+                    _request.Succcess = true;
+                    _request.Message = "Exito";
+                    _request.Data = _factura;
+                }
+                else
+                {
+                    _request.Succcess = false;
+                    _request.Message = "No se encontraron datos relacionados a la factura";
+                }
             }
             catch (Exception ex)
             {
@@ -106,6 +134,46 @@ namespace sistema_facturacion_api.Service.FacturaServices
                     _request.Succcess = false;
                     _request.Message = "No se encontraron datos relacionados a la factura";
                 }
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = $"Ocurrio un error: {ex.Message}";
+            }
+            return _request;
+        }
+
+        public async Task<OperationResultRequest> GetFactura(int facturaId)
+        {
+            try
+            {
+                _factura = await _dbContext.Factura.Where(x => x.Id == facturaId).FirstOrDefaultAsync();
+                IQueryable<TblDetalleDeFacturas> query = _dbContext.DetalleDeFactura.Where(x => x.FacturaId == facturaId)
+                                                                   .Include(detalleFactura => detalleFactura.Producto)
+                                                                   .AsQueryable();
+                _listDetalleFacturasDTO = _mapper.Map<List<TblDetalleDeFacturasDTO>>(await query.ToListAsync());
+                NuevaFacturaDTO factura = new NuevaFacturaDTO();
+                factura.Factura = _mapper.Map<TblFacturasDTO>(_factura);
+                factura.DetalleFactura = _listDetalleFacturasDTO;
+                _request.Succcess = true;
+                _request.Message = "Exito";
+                _request.Data = factura;
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = $"Ocurrio un error: {ex.Message}";
+            }
+            return _request;
+        }
+        public async Task<OperationResultRequest> BuscarFactura(int facturaId)
+        {
+            try
+            {
+                List<TblFacturas> facturas = await _dbContext.Factura.Where(x => x.Id == facturaId).ToListAsync();
+                _request.Succcess = true;
+                _request.Message = "Exito";
+                _request.Data = facturas;
             }
             catch (Exception ex)
             {

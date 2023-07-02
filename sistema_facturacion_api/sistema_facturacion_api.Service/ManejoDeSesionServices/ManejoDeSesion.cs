@@ -98,6 +98,9 @@ namespace sistema_facturacion_api.Service.ManejoDeSesionServices
                         //... Paso 2: se buscan los permisos.
                         _detalleDeSesion.Permisos = await _dbContext.Permiso.Where(x => x.UsuarioId == _usuarios.Id).ToListAsync();
                         _detalleDeSesion.Modulos = await BuscarModulos(_detalleDeSesion.Permisos);
+                        int almacenesUnidos = 10;
+                        //...Este valor es fijo por el momento pero el mismo puede verse sometido a modificaciones que permitan manejar la empresa de manera dinamica.
+                        _detalleDeSesion.EmpresaId = almacenesUnidos;
 
                         _requestLogin.Succcess = true;
                         _requestLogin.Message = $"Bienvenido {_usuarios.Nombres} {_usuarios.Apellidos}";
