@@ -5,6 +5,9 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AddSalesRoutingModule } from './add-sales.routing.module';
 import { AddSalesComponent } from './add-sales.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SalesService } from 'src/app/services/sales/sales.service';
+import { PdfFacturaModule } from '../../pdf-factura/pdf-factura.module';
 
 @NgModule({
   declarations: [
@@ -22,8 +25,11 @@ import { AddSalesComponent } from './add-sales.component';
     DxRadioGroupModule,
     DxButtonModule,
     DxDataGridModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    PdfFacturaModule
   ],
+  providers: [SalesService],
   exports: [AddSalesComponent]
 })
 export class AddSalesModule { }

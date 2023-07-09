@@ -47,7 +47,8 @@
               <td>{{item.iva}}</td>
               <td>{{item.totalPagado}}</td>
               <td>
-                <app-pdf-factura [facturaId]="item.id">
+                <app-pdf-factura [facturaId]="item.id"
+                                 [btnVisualizarFactura]="true">
                 </app-pdf-factura>
                 <button class="btn btn-danger btnAccion"
                         (click)="btnEliminar(item.id)">

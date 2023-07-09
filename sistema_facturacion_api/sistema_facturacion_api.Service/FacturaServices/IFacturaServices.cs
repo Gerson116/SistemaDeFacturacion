@@ -16,6 +16,7 @@ namespace sistema_facturacion_api.Service.FacturaServices
         Task<OperationResultRequest> GetCabeceraFactura(int facturaId);
         Task<OperationResultRequest> GetDetalleFactura(int facturaId);
         Task<OperationResultRequest> PostNuevoFactura(NuevaFacturaDTO nuevaFactura);
+        Task<OperationResultRequest> PostBuscarFactura(ParametrosDeBusqueda parametroDeBusqueda);
         Task<OperationResultRequest> DeleteFactura(int empresaId, int facturaId);
     }
 }

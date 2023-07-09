@@ -17,72 +17,93 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Salsa de Tomate</td>
-            <td>100</td>
-            <td>10</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Salsa de Tomate</td>
-            <td>100</td>
-            <td>10</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Salsa de Tomate</td>
-            <td>100</td>
-            <td>10</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Salsa de Tomate</td>
-            <td>100</td>
-            <td>10</td>
-            <td>0</td>
-            <td>0</td>
+          <tr *ngFor="let item of listDetalleFactura">
+            <td>
+              {{ item.nombreProducto }}
+            </td>
+            <td>
+              {{ item.precioUnidad }}
+            </td>
+            <td>
+              {{ item.cantidadProducto }}
+            </td>
+            <td>
+              {{ item.descuento }}
+            </td>
+            <td>
+              {{ item.iva }}
+            </td>
           </tr>
         </tbody>
       </table>
-      <div>
-        <strong class="distanciaGeneral">Sub Total: 0</strong>
-        <strong class="distanciaGeneral">IVA: 0</strong>
-        <strong class="distanciaGeneral">Total Pagado: 0</strong>
-        <button class="btn btn-info">Generar Factura</button>
+      <div class="col-md-6 mb-2">
+        <!-- Forma de Pago -->
+        <form [formGroup]="formaDePagoFormGroup">
+          <div class="form-group">
+            <select name="formaDePago" id="formaDePago" class="form-select">
+              <option *ngFor="let item of formaDePago" [value]="item.value">
+                {{ item.viewValue }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-12">
+        <strong class="distanciaGeneral">Sub Total: {{ subTotal }}</strong>
+        <strong class="distanciaGeneral">IVA: {{ iva }}</strong>
+        <strong class="distanciaGeneral">Total Pagado: {{ totalPagado }}</strong>
+        <!-- <button class="btn btn-info">Generar Factura</button> -->
+        <app-pdf-factura [cabezera]="cabezeraFactura"
+                         [detalleFactura]="listDetalleFactura"
+                         [btnVisualizarGenerarFactura]="btnVisualizarGenerarFactura">
+        </app-pdf-factura>
       </div>
     </div>
     <div class="col-md-6 justify-content-end">
-      <form>
+      <form [formGroup]="productoFormGroup">
         <div class="form-group">
           <label for="input-datalist">Producto</label>
-          <input type="text" class="form-control" placeholder="Timezone" list="list-timezone" id="input-datalist">
-          <datalist id="list-timezone">
-              <option>Asia/Aden</option>
-              <option>Asia/Aqtau</option>
-              <option>Asia/Baghdad</option>
-              <option>Asia/Barnaul</option>
-              <option>Asia/Chita</option>
-              <option>Asia/Dhaka</option>
-              <option>Asia/Famagusta</option>
-              <option>Asia/Hong_Kong</option>
-              <option>Asia/Jayapura</option>
-              <option>Asia/Kuala_Lumpur</option>
-              <option>Asia/Jakarta</option>
-          </datalist>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Producto"
+                 list="list-timezone"
+                 id="input-datalist"
+                 (ngModelChange)="buscarProducto()"
+                 formControlName="producto">
+            <div *ngIf="mostrarAutoComplete">
+              <ul class="custom-list">
+                <li *ngFor="let item of sourcesProduct"
+                  (click)="seleccionarElemento(item)">
+                  {{item.nombre}}
+                </li>
+              </ul>
+            </div>
         </div>
         <div class="form-group">
           <label for="CantidadProducto">Cantidad Producto</label>
-          <input type="text" name="CantidadProducto" class="form-control">
+          <input type="number"
+                 name="CantidadProducto"
+                 class="form-control"
+                 formControlName="cantidadDeProducto">
         </div>
         <div class="form-group">
           <label for="PrecioUnidad">Precio</label>
-          <input type="text" name="PrecioUnidad" class="form-control">
+          <input type="number"
+                 name="PrecioUnidad"
+                 class="form-control"
+                 formControlName="precioProducto">
+        </div>
+        <div class="form-group">
+          <label for="descuento">Descuento</label>
+          <input type="number"
+                 name="descuento"
+                 class="form-control"
+                 formControlName="descuento">
         </div>
         <div class="form-group mt-2">
-          <button class="btn btn-info">Agregar</button>
+          <button class="btn btn-info"
+                  [disabled]="!productoFormGroup.valid"
+                  (click)="adicionarElemento()">Agregar</button>
         </div>
       </form>
     </div>
