@@ -71,12 +71,40 @@ namespace sistema_facturacion_api.Service.FacturaServices
             try
             {
                 List<TblFacturas> factura = new List<TblFacturas>();
-                IQueryable<TblFacturas> query = _dbContext.Factura.Where(x => x.EmpresaId == empresaId).AsQueryable();
+                IQueryable<TblFacturas> query = _dbContext.Factura
+                    .Where(x => x.EmpresaId == empresaId && x.EstadoFacturaId == (int)EnumEstadoFacturas.Activo)
+                    .AsQueryable();
                 factura = await query.ToListAsync();
                 _listFacturaDTO = _mapper.Map<List<TblFacturasDTO>>(factura);
                 _request.Succcess = true;
                 _request.Message = "Exito";
                 _request.Data = _listFacturaDTO;
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = $"Ocurrio un error: {ex.Message}";
+            }
+            return _request;
+        }
+
+        public async Task<OperationResultRequest> GetCabeceraFactura(int facturaId)
+        {
+            try
+            {
+                _factura = await _dbContext.Factura.Where(x => x.Id == facturaId).FirstOrDefaultAsync();
+
+                if (_factura != null)
+                {
+                    _request.Succcess = true;
+                    _request.Message = "Exito";
+                    _request.Data = _factura;
+                }
+                else
+                {
+                    _request.Succcess = false;
+                    _request.Message = "No se encontraron datos relacionados a la factura";
+                }
             }
             catch (Exception ex)
             {
@@ -115,6 +143,46 @@ namespace sistema_facturacion_api.Service.FacturaServices
             return _request;
         }
 
+        public async Task<OperationResultRequest> GetFactura(int facturaId)
+        {
+            try
+            {
+                _factura = await _dbContext.Factura.Where(x => x.Id == facturaId).FirstOrDefaultAsync();
+                IQueryable<TblDetalleDeFacturas> query = _dbContext.DetalleDeFactura.Where(x => x.FacturaId == facturaId)
+                                                                   .Include(detalleFactura => detalleFactura.Producto)
+                                                                   .AsQueryable();
+                _listDetalleFacturasDTO = _mapper.Map<List<TblDetalleDeFacturasDTO>>(await query.ToListAsync());
+                NuevaFacturaDTO factura = new NuevaFacturaDTO();
+                factura.Factura = _mapper.Map<TblFacturasDTO>(_factura);
+                factura.DetalleFactura = _listDetalleFacturasDTO;
+                _request.Succcess = true;
+                _request.Message = "Exito";
+                _request.Data = factura;
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = $"Ocurrio un error: {ex.Message}";
+            }
+            return _request;
+        }
+        public async Task<OperationResultRequest> BuscarFactura(int facturaId)
+        {
+            try
+            {
+                List<TblFacturas> facturas = await _dbContext.Factura.Where(x => x.Id == facturaId).ToListAsync();
+                _request.Succcess = true;
+                _request.Message = "Exito";
+                _request.Data = facturas;
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = $"Ocurrio un error: {ex.Message}";
+            }
+            return _request;
+        }
+
         public async Task<OperationResultRequest> PostNuevoFactura(NuevaFacturaDTO nuevaFactura)
         {
             try
@@ -123,6 +191,7 @@ namespace sistema_facturacion_api.Service.FacturaServices
                 _listDetalleFacturas = _mapper.Map<List<TblDetalleDeFacturas>>(nuevaFactura.DetalleFactura);
 
                 _factura.FechaDeCreacion = DateTime.Now;
+                _factura.FormaDePagoId = (int)EnumFormaDePago.Efectivo;
 
                 //... Esta condicion verifica si le aplica descuento a la factura.
                 if (_factura.Descuento > _descuentoAplicable)
@@ -153,9 +222,13 @@ namespace sistema_facturacion_api.Service.FacturaServices
                 await _dbContext.DetalleDeFactura.AddRangeAsync(_listDetalleFacturas);
                 await _dbContext.SaveChangesAsync();
 
+                Dictionary<string, string> cabeceraFactura = new Dictionary<string, string>();
+                cabeceraFactura.Add("FacturaId", facturaId.ToString());
+                cabeceraFactura.Add("LineaDeFactura", _factura.LineaDePago);
+
                 _request.Succcess = true;
                 _request.Message = "Exito";
-                //_request.Data
+                _request.Data = cabeceraFactura;
             }
             catch (Exception ex)
             {
@@ -167,8 +240,12 @@ namespace sistema_facturacion_api.Service.FacturaServices
 
         private decimal CalcularIVA(decimal subTotal, decimal iva)
         {
-            decimal ivaAplicado = (subTotal * iva) / 100;
-            return ivaAplicado;
+            if (iva == 0)
+            {
+                decimal ivaAplicado = (subTotal * iva) / 100;
+                return ivaAplicado;
+            }
+            return iva;
         }
 
         private string GenerarLineaDePago()
@@ -198,6 +275,26 @@ namespace sistema_facturacion_api.Service.FacturaServices
         {
             decimal porcentaje = (subTotal * descuento) / 100;
             return subTotal - porcentaje;
+        }
+
+        public async Task<OperationResultRequest> PostBuscarFactura(ParametrosDeBusqueda parametroDeBusqueda)
+        {
+            try
+            {
+                List<TblProducto> productos = new List<TblProducto>();
+                productos = await _dbContext.Producto
+                                            .Where(x => x.Nombre.Contains(parametroDeBusqueda.Nombre))
+                                            .ToListAsync();
+                _request.Succcess = true;
+                _request.Message = "Exito";
+                _request.Data = productos;
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = ex.Message;
+            }
+            return _request;
         }
     }
 }

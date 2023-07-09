@@ -1,0 +1,14 @@
+
+<button class="btn btn-info"
+title="haciendo click sobre este botón, podra visualizar la factura"
+(click)="btnImprimirFacturaExistente()"
+*ngIf="btnVisualizarFactura">
+<i class="fa-solid fa-file"></i> Factura
+</button>
+
+<button class="btn btn-info"
+title="haciendo click sobre este botón, podra visualizar la factura"
+(click)="btnGenerarFactura()"
+*ngIf="btnVisualizarGenerarFactura">
+<i class="fa-solid fa-file"></i> Generar
+</button>

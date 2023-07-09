@@ -1,18 +1,44 @@
 
-<div class="login-container">
-  <form>
-    <h2>Login</h2>
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" required>
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required>
-    <div class="forgot-password">
-      <a href="#">Olvidé mi contraseña</a>
-    </div>
-    <div class="buttons">
-      <button type="submit">Iniciar sesión</button>
-      <button class="google" type="button">Iniciar sesión con Google</button>
-      <button class="apple" type="button">Iniciar sesión con Apple</button>
-    </div>
-  </form>
+<div class="row login-container">
+  <div class="col-md-4">
+    <form [formGroup]="formGroupIniciarSesion">
+      <h2>Login</h2>
+      <div class="input-group mt-2">
+        <span class="input-group-text" id="basic-addon1">Email:</span>
+        <input type="email"
+               id="email"
+               name="email"
+               formControlName="email"
+               class="form-control">
+      </div>
+      <div class="input-group mt-2">
+        <span class="input-group-text" id="basic-addon1">Contraseña:</span>
+        <input type="password"
+               id="password"
+               name="password"
+               formControlName="pass"
+               class="form-control">
+      </div>
+      <div class="forgot-password">
+        <button class="btn"
+                (click)="olvideMiPass()">
+          Olvidé mi contraseña
+        </button>
+      </div>
+      <div class="buttons">
+        <button class="btn btnIniciarSesion"
+                (click)="iniciarSesion()">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
+        </button>
+      </div>
+      <div class="buttons">
+        <button class="btn btnGoogle mt-2 mr-1">
+          <i class="fa-brands fa-google"></i> Iniciar sesión con Google
+        </button>
+        <!-- <button  class="btn btnApple mt-2">
+          Iniciar sesión con Apple
+        </button> -->
+      </div>
+    </form>
+  </div>
 </div>

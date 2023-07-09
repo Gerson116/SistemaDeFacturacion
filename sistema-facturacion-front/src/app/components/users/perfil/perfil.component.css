@@ -1,0 +1,11 @@
+body{
+  background: #b1c0c8;
+}
+
+#chart{
+  background: rgb(252, 249, 249);
+}
+
+.ventanaCompleta{
+  height: 100vh;
+}

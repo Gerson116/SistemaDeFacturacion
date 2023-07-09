@@ -1,0 +1,111 @@
+
+
+<app-dashboard></app-dashboard>
+
+<div class="col-md-8 content">
+  <div class="row ventanaCompleta">
+    <div class="col-md-6">
+      <h3 class="title">Mantenimiento Usuarios</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Descuento</th>
+            <th>IVA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listDetalleFactura">
+            <td>
+              {{ item.nombreProducto }}
+            </td>
+            <td>
+              {{ item.precioUnidad }}
+            </td>
+            <td>
+              {{ item.cantidadProducto }}
+            </td>
+            <td>
+              {{ item.descuento }}
+            </td>
+            <td>
+              {{ item.iva }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="col-md-6 mb-2">
+        <!-- Forma de Pago -->
+        <form [formGroup]="formaDePagoFormGroup">
+          <div class="form-group">
+            <select name="formaDePago" id="formaDePago" class="form-select">
+              <option *ngFor="let item of formaDePago" [value]="item.value">
+                {{ item.viewValue }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-12">
+        <strong class="distanciaGeneral">Sub Total: {{ subTotal }}</strong>
+        <strong class="distanciaGeneral">IVA: {{ iva }}</strong>
+        <strong class="distanciaGeneral">Total Pagado: {{ totalPagado }}</strong>
+        <!-- <button class="btn btn-info">Generar Factura</button> -->
+        <app-pdf-factura [cabezera]="cabezeraFactura"
+                         [detalleFactura]="listDetalleFactura"
+                         [btnVisualizarGenerarFactura]="btnVisualizarGenerarFactura">
+        </app-pdf-factura>
+      </div>
+    </div>
+    <div class="col-md-6 justify-content-end">
+      <form [formGroup]="productoFormGroup">
+        <div class="form-group">
+          <label for="input-datalist">Producto</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Producto"
+                 list="list-timezone"
+                 id="input-datalist"
+                 (ngModelChange)="buscarProducto()"
+                 formControlName="producto">
+            <div *ngIf="mostrarAutoComplete">
+              <ul class="custom-list">
+                <li *ngFor="let item of sourcesProduct"
+                  (click)="seleccionarElemento(item)">
+                  {{item.nombre}}
+                </li>
+              </ul>
+            </div>
+        </div>
+        <div class="form-group">
+          <label for="CantidadProducto">Cantidad Producto</label>
+          <input type="number"
+                 name="CantidadProducto"
+                 class="form-control"
+                 formControlName="cantidadDeProducto">
+        </div>
+        <div class="form-group">
+          <label for="PrecioUnidad">Precio</label>
+          <input type="number"
+                 name="PrecioUnidad"
+                 class="form-control"
+                 formControlName="precioProducto">
+        </div>
+        <div class="form-group">
+          <label for="descuento">Descuento</label>
+          <input type="number"
+                 name="descuento"
+                 class="form-control"
+                 formControlName="descuento">
+        </div>
+        <div class="form-group mt-2">
+          <button class="btn btn-info"
+                  [disabled]="!productoFormGroup.valid"
+                  (click)="adicionarElemento()">Agregar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,187 @@
+
+<app-dashboard></app-dashboard>
+
+
+<div class="row">
+  <div class="col login-container">
+    <form>
+      <div class="row margenTopGeneral">
+        <!-- Apellidos y Nombre -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">Apellido(s)</div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  mode="text"
+                  placeholder="Ingresa el apellido"
+                  [showClearButton]="true"
+                  value="Duarte y Diez"
+                ></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">Nombre(s)</div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  mode="text"
+                  placeholder="Ingresa el nombre"
+                  [showClearButton]="true"
+                  value="Juan Pablo"
+                ></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row margenTopGeneral">
+        <!-- nombreDeUsuario y Fecha de Nacimiento -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">Nombre Usuario</div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  mode="text"
+                  placeholder="Ingresa un nombre de usuario"
+                  [showClearButton]="true"
+                  value="JuanPabloDev"
+                ></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">Fecha de Nacimiento</div>
+              <div class="dx-field-value">
+                <dx-date-box
+                  invalidDateMessage="The date must have the following format: MM/dd/yyyy"
+                >
+                  <dx-validator>
+                    <dxi-validation-rule
+                      type="required"
+                      message="La fecha de Nacimiento es requerida"
+                    ></dxi-validation-rule>
+                    <dxi-validation-rule
+                      type="range"
+                      [max]="maxDate"
+                      message="You must be at least 21 years old"
+                    ></dxi-validation-rule>
+                  </dx-validator>
+                </dx-date-box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row margenTopGeneral">
+        <!-- tarjeta de identificación y email -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">(Cédula Dominicana)</div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  mode="text"
+                  mask="000-0000000-0"
+                  placeholder="Tarjeta de Identificación (Cédula Dominicana)"
+                  [showClearButton]="true"
+                  value="00012345679"
+                ></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">Email</div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  mode="email"
+                  placeholder="Ingresa el email"
+                  [showClearButton]="true"
+                  value="juanpabloduarte@gmail.com"
+                ></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row margenTopGeneral">
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">Rol Usuario</div>
+                <div class="dx-field-value">
+                <dx-select-box
+                  [dataSource]="data"
+                  displayExpr="Name"
+                  valueExpr="ID"
+                  [value]="role[1].ID"
+                ></dx-select-box>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">Contraseña</div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  mode="password"
+                  placeholder="Ingresa la contraseña"
+                  [showClearButton]="true"
+                  value="Kuksaoiw"
+                ></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row margenTopGeneral">
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="dx-field">
+              <div class="dx-field-label">Estado</div>
+                <div class="dx-field-value">
+                <dx-select-box
+                  [dataSource]="dataEstado"
+                  displayExpr="Name"
+                  valueExpr="ID"
+                  [value]="estado[0].ID"
+                ></dx-select-box>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row margenTopGeneral">
+        <div class="col-md-12">
+          <div class="dx-field-value">
+            <dx-button
+              icon="check"
+              type="success"
+              text="Guardar"
+            >
+            </dx-button>
+            <dx-button
+              icon="back"
+              type="danger"
+              text="Volver atrás"
+            >
+            </dx-button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

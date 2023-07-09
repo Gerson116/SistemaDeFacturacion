@@ -1,0 +1,57 @@
+
+
+<app-dashboard></app-dashboard>
+
+<div class="row ventanaCompleta">
+  <div class="col-md-4">
+    <form class="form-striped">
+      <div class="form-group">
+        <h3>Perfil</h3>
+      </div>
+      <div class="form-group">
+        <label for="apellido">Apellido(s):</label>
+        <input type="text" name="apellido" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="nombre">Nombre(s):</label>
+        <input type="text" name="nombre" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="nombreDeUsuario">Nombre de Usuario:</label>
+        <input type="text" name="nombreDeUsuario" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="fechaDeNacimiento">Fecha:</label>
+        <input type="date" name="fechaDeNacimiento" class="form-control">
+      </div>
+      <div class="form-group mt-2">
+        <button class="btn btn-success btn-large">Editar</button>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Ventas realizadas durante la semana.</h3>
+        <strong>Monto total vendido: {{totalDeLasVentas}}</strong>
+      </div>
+      <div class="col-md-12">
+        <dx-chart id="chart" [dataSource]="detalleDeVentasSemanal">
+          <dxi-series
+            argumentField="day"
+            valueField="oranges"
+            name="My oranges"
+            type="bar"
+            color="#ffaa66"
+          >
+          </dxi-series>
+        </dx-chart>
+      </div>
+      <div class="col-md-12">
+        <p>
+          Gráfico representa las ventas realizadas durante el transcurso de la semana.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+
+
+.content {
+  margin-left: 200px; /* Ajusta el margen izquierdo para dejar espacio para el menú */
+  background-color: #fff; /* Color de fondo para el contenido */
+  width: calc(100% - 188px); /* Ajusta el ancho según el margen izquierdo del menú */
+  height: 100vh; /* Ocupar el 100% de la altura de la pantalla */
+}

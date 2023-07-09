@@ -34,6 +34,38 @@ namespace sistema_facturacion_api.Controllers
             return _result;
         }
 
+        [HttpGet("GetFactura/{facturaId}")]
+        public async Task<ActionResult<OperationResultRequest>> GetFactura(int facturaId)
+        {
+            _result = await _facturaServices.GetFactura(facturaId);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
+        [HttpGet("BuscarFactura/{facturaId}")]
+        public async Task<ActionResult<OperationResultRequest>> BuscarFactura(int facturaId)
+        {
+            _result = await _facturaServices.BuscarFactura(facturaId);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
+
+        [HttpGet("GetCabeceraFactura/{facturaId}")]
+        public async Task<ActionResult<OperationResultRequest>> GetCabeceraFactura(int facturaId)
+        {
+            _result = await _facturaServices.GetCabeceraFactura(facturaId);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
+
         [HttpGet("GetDetalleFactura/{facturaId}")]
         public async Task<ActionResult<OperationResultRequest>> GetDetalleFactura(int facturaId)
         {
@@ -49,6 +81,16 @@ namespace sistema_facturacion_api.Controllers
         public async Task<ActionResult<OperationResultRequest>> PostNuevoFactura([FromBody] NuevaFacturaDTO nuevaFactura)
         {
             _result = await _facturaServices.PostNuevoFactura(nuevaFactura);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
+        [HttpPost("PostBuscarFactura")]
+        public async Task<ActionResult<OperationResultRequest>> PostBuscarFactura([FromBody] ParametrosDeBusqueda busqueda)
+        {
+            _result = await _facturaServices.PostBuscarFactura(busqueda);
             if (_result.Succcess)
             {
                 return _result;

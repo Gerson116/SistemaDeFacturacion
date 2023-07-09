@@ -1,1 +1,30 @@
-<p>dashboard works!</p>
+<div class="col-md-4" [class.background-color]="colorDeFondo" [class.color]="colorDeLaLetra">
+  <div class="navbar">
+    <a href="#" class="logo">Logo</a>
+    <ul class="menu">
+      <!-- <li>
+        <form [formGroup]="cambioDeColorFormGroup">
+          <div class="form-check form-switch">
+            <input class="form-check-input"
+                   type="checkbox"
+                   role="switch"
+                   formControlName="selectColor"
+                   (change)="cambiarElColorDeLaPagina()">
+            <label class="form-check-label" for="flexSwitchCheckChecked">
+              <i class="fa-regular fa-moon" *ngIf="cambioDeColorFormGroup.controls['selectColor'].value == true"></i>
+              <i class="fa-regular fa-sun" *ngIf="cambioDeColorFormGroup.controls['selectColor'].value == false"></i>
+            </label>
+          </div>
+        </form>
+      </li> -->
+      <li *ngFor="let item of menuOptions">
+        <a [routerLink]="item.ruta">{{ item.nombre }}</a>
+      </li>
+      <li>
+        <button class="btn btn-danger" (click)="btnSignOut()">
+          <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

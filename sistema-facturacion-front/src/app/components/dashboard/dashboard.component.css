@@ -1,0 +1,44 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 212px; /* Ajusta el ancho del menú según tus necesidades */
+  background-color: #f1f1f1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+  text-decoration: none;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.menu {
+  list-style-type: none;
+  margin: 0%;
+  padding: 0%;
+}
+
+.menu li {
+  margin-bottom: 10px;
+}
+
+.menu li a {
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+  color: #333;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.content{
+  margin: 0%;
+}

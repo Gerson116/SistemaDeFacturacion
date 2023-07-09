@@ -8,7 +8,10 @@ namespace sistema_facturacion_api.Data.DTOs
 {
     public class DetalleDeSesion
     {
-        public TblUsuarios Usuarios { get; set; }
+        public UsuarioSesionDTO Usuarios { get; set; }
+        public int EmpresaId { get; set; }
+        public int RolId { get; set; }
         public List<TblPermiso> Permisos { get; set; }
+        public List<TblModuloDTO> Modulos { get; set; }
     }
 }

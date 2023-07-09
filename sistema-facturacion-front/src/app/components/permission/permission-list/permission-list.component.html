@@ -1,0 +1,156 @@
+
+
+<app-dashboard></app-dashboard>
+
+<div class="col-md-8 content">
+  <div class="row ventanaCompleta">
+    <div class="col-md-12">
+      <h3 class="title">{{title}}</h3>
+    </div>
+    <div class="col-md-4">
+      <h5>Datos del usuario</h5>
+      <form [formGroup]="formGroupFilter">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Cédula:</span>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Buscar por cédula"
+                 aria-label="Buscar por cédula"
+                 aria-describedby="button-addon2"
+                 formControlName="cedula">
+          <button class="btn btn-outline-primary"
+                  type="button" id="button-addon2"
+                  (click)="searchUser()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+        <div class="input-group mt-2">
+          <span class="input-group-text" id="basic-addon1">Usuario Id:</span>
+          <input type="number"
+                 class="form-control"
+                 placeholder="Usuario Id"
+                 formControlName="usuarioId"
+                 name="usuarioId">
+        </div>
+        <div class="input-group mt-2">
+          <span class="input-group-text" id="basic-addon1">Rol Id:</span>
+          <input type="number"
+                 class="form-control"
+                 placeholder="Rol Id"
+                 formControlName="usuarioId"
+                 name="usuarioId">
+        </div>
+        <div class="input-group mt-2">
+          <span class="input-group-text" id="basic-addon1">Apellido(s):</span>
+          <input type="text"
+                 class="form-control"
+                 [readOnly]="true"
+                 placeholder="Apellido"
+                 formControlName="apellido">
+        </div>
+        <div class="input-group mt-2">
+          <span class="input-group-text" id="basic-addon1">Nombre(s):</span>
+          <input type="text"
+                 class="form-control"
+                 [readOnly]="true"
+                 placeholder="Nombre"
+                 formControlName="nombre">
+        </div>
+        <div class="input-group mt-2">
+          <span class="input-group-text" id="basic-addon1">Nombre de Usuario:</span>
+          <input type="text"
+                 class="form-control"
+                 [readOnly]="true"
+                 placeholder="Nombre de Usuario"
+                 formControlName="nombreDeUsuario">
+        </div>
+        <div class="form-group mt-2">
+          <p class="stateMessage">
+            {{ state }} <i class="fa-solid fa-circle" [style.color]="colorState"></i>
+          </p>
+        </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary"
+                  (click)="btnSavePermission()"
+                  (keydown.enter)="btnSavePermission()">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-8 mt-3">
+      <h5>Permisos</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Modulo</th>
+            <th>C</th>
+            <th>R</th>
+            <th>U</th>
+            <th>D</th>
+          </tr>
+        </thead>
+        <tbody [formGroup]="formGroupPermission">
+          <tr *ngFor="let item of dataSource">
+            <td>
+              {{ item.id }}
+            </td>
+            <td>
+              {{ item.nombre }}
+            </td>
+            <td>
+              <div class="form-check">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexCheckIndeterminate"
+                     formControlName="c"
+                     [checked]="item.c"
+                     (change)="the_C_FieldChanged(item, $event.target)">
+                <label class="form-check-label" for="flexCheckIndeterminate">
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="form-check">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexCheckIndeterminate"
+                     formControlName="r"
+                     [checked]="item.r"
+                     (change)="the_R_FieldChanged(item, $event.target)">
+                <label class="form-check-label" for="flexCheckIndeterminate">
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="form-check">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexCheckIndeterminate"
+                     formControlName="u"
+                     [checked]="item.u"
+                     (change)="the_U_FieldChanged(item, $event.target)">
+                <label class="form-check-label" for="flexCheckIndeterminate">
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="form-check">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexCheckIndeterminate"
+                     formControlName="d"
+                     [checked]="item.d"
+                     (change)="the_D_FieldChanged(item, $event.target)">
+                <label class="form-check-label" for="flexCheckIndeterminate">
+                </label>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

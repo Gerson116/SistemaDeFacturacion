@@ -51,6 +51,16 @@ namespace sistema_facturacion_api.Controllers
             }
             return _result;
         }
+        [HttpPut("EditarYAgregarPermisosExistentes")]
+        public async Task<OperationResultRequest> EditarYAgregarPermisosExistentes([FromBody] List<TblPermisoDTO> permisosUsuarios)
+        {
+            _result = await _permisosServices.EditarYAgregarPermisosExistentes(permisosUsuarios);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
         [HttpDelete("DeletePermisos/{usuarioId}/{permisoId}")]
         public async Task<OperationResultRequest> DeletePermisos(int usuarioId, int permisoId)
         {
