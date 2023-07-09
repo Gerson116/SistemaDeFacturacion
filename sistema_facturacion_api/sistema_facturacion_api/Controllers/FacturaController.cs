@@ -87,6 +87,16 @@ namespace sistema_facturacion_api.Controllers
             }
             return _result;
         }
+        [HttpPost("PostBuscarFactura")]
+        public async Task<ActionResult<OperationResultRequest>> PostBuscarFactura([FromBody] ParametrosDeBusqueda busqueda)
+        {
+            _result = await _facturaServices.PostBuscarFactura(busqueda);
+            if (_result.Succcess)
+            {
+                return _result;
+            }
+            return _result;
+        }
 
         [HttpDelete("DeleteFactura/{empresaId}/{facturaId}")]
         public async Task<ActionResult<OperationResultRequest>> DeleteFactura(int empresaId, int facturaId)

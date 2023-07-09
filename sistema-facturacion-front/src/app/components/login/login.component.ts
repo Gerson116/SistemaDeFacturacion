@@ -49,7 +49,7 @@ export class LoginComponent{
         localStorage.setItem(environment.permisos, JSON.stringify(resp.data.permisos));
         localStorage.setItem(environment.modulos, JSON.stringify(resp.data.modulos));
         localStorage.setItem(environment.empresaId, resp.data.empresaId);
-        this.router.navigateByUrl('perfil');
+        this.router.navigateByUrl('listado-ventas');
       }
       else{
         this.sweetAlert.dangerMessage(`${resp.data}`);

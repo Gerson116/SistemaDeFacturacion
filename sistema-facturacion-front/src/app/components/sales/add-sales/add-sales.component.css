@@ -14,3 +14,29 @@
 .distanciaGeneral{
   margin-right: 25px;
 }
+
+.custom-list {
+  list-style: none;
+  padding: 0;
+}
+
+.custom-list li {
+  padding-left: 20px;
+  position: relative;
+}
+
+.custom-list li:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #000;
+  border-radius: 50%;
+}
+
+.custom-list li:hover {
+  background-color: #f0f0f0;
+}

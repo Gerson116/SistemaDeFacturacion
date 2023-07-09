@@ -8,11 +8,11 @@ import { SalesListRoutingModule } from './sales-list.routing.module';
 import { SalesService } from 'src/app/services/sales/sales.service';
 import { PdfFacturaComponent } from '../../pdf-factura/pdf-factura.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PdfFacturaModule } from '../../pdf-factura/pdf-factura.module';
 
 @NgModule({
   declarations: [
-    SalesListComponent,
-    PdfFacturaComponent
+    SalesListComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +27,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     DxButtonModule,
     DxDataGridModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PdfFacturaModule
   ],
   providers:[SalesService],
   exports: [SalesListComponent]

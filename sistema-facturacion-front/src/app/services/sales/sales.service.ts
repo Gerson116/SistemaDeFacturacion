@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NuevaFacturaDTO } from 'src/app/models/dtos/nueva-factura-dto';
 import { OperationResultRequest } from 'src/app/models/dtos/operation-result-request';
+import { ParametrosDeBusqueda } from 'src/app/models/dtos/parametros-de-busqueda';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -16,6 +17,14 @@ export class SalesService {
 
   postAddPermission(item: NuevaFacturaDTO[]): Observable<OperationResultRequest>{
     return this.http.post<OperationResultRequest>(`${this.baseUrl}PostAgregarFactura`, item);
+  }
+
+  postBuscarFactura(item: ParametrosDeBusqueda): Observable<OperationResultRequest>{
+    return this.http.post<OperationResultRequest>(`${this.baseUrl}PostBuscarFactura`, item);
+  }
+
+  postNuevoFactura(item: NuevaFacturaDTO): Observable<OperationResultRequest>{
+    return this.http.post<OperationResultRequest>(`${this.baseUrl}PostNuevoFactura`, item);
   }
 
   buscarFactura(facturaId: number): Observable<OperationResultRequest>{

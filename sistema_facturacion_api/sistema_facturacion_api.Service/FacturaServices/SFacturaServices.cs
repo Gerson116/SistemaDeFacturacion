@@ -191,6 +191,7 @@ namespace sistema_facturacion_api.Service.FacturaServices
                 _listDetalleFacturas = _mapper.Map<List<TblDetalleDeFacturas>>(nuevaFactura.DetalleFactura);
 
                 _factura.FechaDeCreacion = DateTime.Now;
+                _factura.FormaDePagoId = (int)EnumFormaDePago.Efectivo;
 
                 //... Esta condicion verifica si le aplica descuento a la factura.
                 if (_factura.Descuento > _descuentoAplicable)
@@ -221,9 +222,13 @@ namespace sistema_facturacion_api.Service.FacturaServices
                 await _dbContext.DetalleDeFactura.AddRangeAsync(_listDetalleFacturas);
                 await _dbContext.SaveChangesAsync();
 
+                Dictionary<string, string> cabeceraFactura = new Dictionary<string, string>();
+                cabeceraFactura.Add("FacturaId", facturaId.ToString());
+                cabeceraFactura.Add("LineaDeFactura", _factura.LineaDePago);
+
                 _request.Succcess = true;
                 _request.Message = "Exito";
-                //_request.Data
+                _request.Data = cabeceraFactura;
             }
             catch (Exception ex)
             {
@@ -235,8 +240,12 @@ namespace sistema_facturacion_api.Service.FacturaServices
 
         private decimal CalcularIVA(decimal subTotal, decimal iva)
         {
-            decimal ivaAplicado = (subTotal * iva) / 100;
-            return ivaAplicado;
+            if (iva == 0)
+            {
+                decimal ivaAplicado = (subTotal * iva) / 100;
+                return ivaAplicado;
+            }
+            return iva;
         }
 
         private string GenerarLineaDePago()
@@ -266,6 +275,26 @@ namespace sistema_facturacion_api.Service.FacturaServices
         {
             decimal porcentaje = (subTotal * descuento) / 100;
             return subTotal - porcentaje;
+        }
+
+        public async Task<OperationResultRequest> PostBuscarFactura(ParametrosDeBusqueda parametroDeBusqueda)
+        {
+            try
+            {
+                List<TblProducto> productos = new List<TblProducto>();
+                productos = await _dbContext.Producto
+                                            .Where(x => x.Nombre.Contains(parametroDeBusqueda.Nombre))
+                                            .ToListAsync();
+                _request.Succcess = true;
+                _request.Message = "Exito";
+                _request.Data = productos;
+            }
+            catch (Exception ex)
+            {
+                _request.Succcess = false;
+                _request.Message = ex.Message;
+            }
+            return _request;
         }
     }
 }

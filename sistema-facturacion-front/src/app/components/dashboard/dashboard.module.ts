@@ -4,6 +4,7 @@ import { DxDrawerModule, DxListModule, DxTabPanelModule, DxTemplateModule, DxTre
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard.routing.module';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -19,7 +20,8 @@ import { RouterModule } from '@angular/router';
     DxDrawerModule,
     DxListModule,
     DashboardRoutingModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   bootstrap: [DashboardComponent],
   exports:[DashboardComponent]
